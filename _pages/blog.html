@@ -1,0 +1,28 @@
+---
+layout: page
+title: Blogs
+---
+<!-- blog -->
+<section class="section">
+  <div class="container">
+    <div class="row">
+      {% for post in site.posts %}
+      {% include post.html %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- /blog -->
+
+<!-- projects -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Labs and projects using Bellman</h2>
+      </div>
+    </div>
+    {% include projects-slider.html %}
+  </div>
+</section>
+<!-- /projects -->

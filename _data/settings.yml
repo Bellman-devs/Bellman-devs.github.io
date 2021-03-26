@@ -1,0 +1,73 @@
+#-------------------------------
+# General Site Settings
+
+title: Bellman
+logo: 
+author: The Bellman Contributors
+description: Project website for Bellman - a python package for composing model-based reinforcement learning agents.
+email: bellman-org@protonmail.com
+copyright: Copyright &copy; 2020 Designed by [Themefisher](https://themefisher.com) & Adapted by the Bellman Contributors
+
+menu:
+- {name: About, link: '#about'}
+- {name: Install, link: '#install'}
+# - {name: Blog, link: '/blog'}
+- {name: Documentation, link: 'http://bellman.readthedocs.io/en/latest/'}
+- {name: GitHub, link: 'https://github.com/Bellman-devs/bellman'}
+
+social:
+- {icon: "ti-twitter", link: "https://twitter.com/BellmanDevs"}
+- {icon: "ti-comments", link: "https://bellmangroup.slack.com"}
+
+
+#-------------------------------
+# Hero Section
+
+hero:
+  hero-title: Build <br>model-based <br>reinforcement learning <br>agents
+  hero-subtitle: in python
+
+
+#-------------------------------
+# Features Section
+
+features-title: Features
+features:
+- {
+    name: Modularity,
+    icon: ti-palette,
+    description: 'Modular design allows flexible composition of agents. Fancy Gaussian processes instead of neural nets for transition dynamics learning? No problem!',
+    active: # Add true to select section
+  }
+- {
+    name: SOTA Agents,
+    icon: ti-panel,
+    description: 'Implementation of state-of-the-art model-based reinforcement learning agents, such as PETS, MBPO or METRPO.',
+    active: true # Add true to select section
+  }
+- {
+    name: Harness,
+    icon: ti-vector,
+    description: 'Set up experiments with standard loops quickly and easy, allowing for standardized and systematic comparison.',
+    active: # Add true to select section
+  }
+
+
+#-------------------------------
+# Projects Slider Section
+
+projects-slider-items:
+  - logo: "assets/images/projects-logo/project-logo-1.png"
+    url: "#"
+    
+  - logo: "assets/images/projects-logo/project-logo-2.png"
+    url: "#"
+    
+  - logo: "assets/images/projects-logo/project-logo-3.png"
+    url: "#"
+    
+  - logo: "assets/images/projects-logo/project-logo-4.png"
+    url: "#"
+    
+  - logo: "assets/images/projects-logo/project-logo-5.png"
+    url: "#"
