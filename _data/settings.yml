@@ -9,12 +9,12 @@ email: bellman-org@protonmail.com
 copyright: Copyright &copy; 2020 Designed by [Themefisher](https://themefisher.com) & Adapted by the Bellman Contributors
 
 menu:
-- {name: About, link: '#about'}
-- {name: Install, link: '#install'}
+- {name: About, link: '#about', target: '_self'}
+- {name: Install, link: '#install', target: '_self'}
 # - {name: Blog, link: '/blog'}
 # - {name: Documentation, link: 'http://bellman.readthedocs.io/en/latest/'}
-- {name: Documentation, link: 'docs/index.html'}
-- {name: GitHub, link: 'https://github.com/Bellman-devs/bellman'}
+- {name: Documentation, link: 'docs/index.html', target: '_blank'}
+- {name: GitHub, link: 'https://github.com/Bellman-devs/bellman', target: '_blank'}
 
 social:
 - {icon: "ti-twitter", link: "https://twitter.com/BellmanDevs"}
