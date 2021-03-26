@@ -12,7 +12,8 @@ menu:
 - {name: About, link: '#about'}
 - {name: Install, link: '#install'}
 # - {name: Blog, link: '/blog'}
-- {name: Documentation, link: 'http://bellman.readthedocs.io/en/latest/'}
+# - {name: Documentation, link: 'http://bellman.readthedocs.io/en/latest/'}
+- {name: Documentation, link: 'docs/index.html'}
 - {name: GitHub, link: 'https://github.com/Bellman-devs/bellman'}
 
 social:

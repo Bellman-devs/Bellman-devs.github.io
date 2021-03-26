@@ -82,13 +82,11 @@ a:hover {
 }
 
 pre, code {
-  display: block;
   position: relative;
   width: calc(100% - 30px);
   font-family: $code-font;
   line-height: 27px;
   font-weight: 400;
-  font-size: 14px;
 }
 
 /* overlay */

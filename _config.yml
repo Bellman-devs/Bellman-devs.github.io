@@ -3,6 +3,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
 permalink: pretty
 plugins:
   - jekyll-sitemap
@@ -20,6 +21,9 @@ defaults:
 
 include:
   - _pages
+
+collections:
+  - docs
 
 sass:
   sass_dir: assets/scss
