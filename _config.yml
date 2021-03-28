@@ -21,9 +21,11 @@ defaults:
 
 include:
   - _pages
-
-collections:
-  - docs
+  - _static
+  - _autosummary
+  - _images
+  - _modules
+  - _sources
 
 sass:
   sass_dir: assets/scss
