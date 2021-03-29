@@ -1,0 +1,25 @@
+bellman.trajectory\_optimisers.trajectory\_optimization\_types.TrajectoryOptimizationType
+=========================================================================================
+
+.. currentmodule:: bellman.trajectory_optimisers.trajectory_optimization_types
+
+.. autoclass:: TrajectoryOptimizationType
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TrajectoryOptimizationType.CrossEntropyMethod
+      ~TrajectoryOptimizationType.RandomShooting
+   
+   

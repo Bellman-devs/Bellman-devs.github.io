@@ -1,0 +1,6 @@
+bellman.environments.transition\_model.keras\_model.utils.create\_concatenated\_inputs
+======================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.utils
+
+.. autofunction:: create_concatenated_inputs

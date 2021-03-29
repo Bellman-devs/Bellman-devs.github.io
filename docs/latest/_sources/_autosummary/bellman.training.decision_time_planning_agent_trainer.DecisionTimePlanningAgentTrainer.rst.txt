@@ -1,0 +1,25 @@
+bellman.training.decision\_time\_planning\_agent\_trainer.DecisionTimePlanningAgentTrainer
+==========================================================================================
+
+.. currentmodule:: bellman.training.decision_time_planning_agent_trainer
+
+.. autoclass:: DecisionTimePlanningAgentTrainer
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~DecisionTimePlanningAgentTrainer.create_training_scheduler
+   
+   
+
+   
+   
+   

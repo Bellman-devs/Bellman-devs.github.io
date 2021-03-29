@@ -1,0 +1,49 @@
+bellman.policies.planning\_policy.PlanningPolicy
+================================================
+
+.. currentmodule:: bellman.policies.planning_policy
+
+.. autoclass:: PlanningPolicy
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~PlanningPolicy.action
+      ~PlanningPolicy.distribution
+      ~PlanningPolicy.get_initial_state
+      ~PlanningPolicy.update
+      ~PlanningPolicy.variables
+      ~PlanningPolicy.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PlanningPolicy.action_spec
+      ~PlanningPolicy.collect_data_spec
+      ~PlanningPolicy.emit_log_probability
+      ~PlanningPolicy.info_spec
+      ~PlanningPolicy.name
+      ~PlanningPolicy.name_scope
+      ~PlanningPolicy.observation_and_action_constraint_splitter
+      ~PlanningPolicy.policy_state_spec
+      ~PlanningPolicy.policy_step_spec
+      ~PlanningPolicy.submodules
+      ~PlanningPolicy.time_step_spec
+      ~PlanningPolicy.trainable_variables
+      ~PlanningPolicy.trajectory_spec
+      ~PlanningPolicy.validate_args
+   
+   

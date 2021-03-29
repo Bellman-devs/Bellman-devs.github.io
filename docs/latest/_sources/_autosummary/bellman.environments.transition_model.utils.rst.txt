@@ -1,0 +1,41 @@
+bellman.environments.transition\_model.utils
+============================================
+
+.. automodule:: bellman.environments.transition_model.utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      extract_transitions_from_trajectories
+      size
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      Transition
+   
+   
+
+   
+   
+   
+
+
+

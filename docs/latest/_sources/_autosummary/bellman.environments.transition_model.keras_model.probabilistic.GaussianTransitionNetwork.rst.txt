@@ -1,0 +1,29 @@
+bellman.environments.transition\_model.keras\_model.probabilistic.GaussianTransitionNetwork
+===========================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.probabilistic
+
+.. autoclass:: GaussianTransitionNetwork
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~GaussianTransitionNetwork.build_model
+      ~GaussianTransitionNetwork.gen_hidden_dense_layers
+      ~GaussianTransitionNetwork.loss
+      ~GaussianTransitionNetwork.metrics
+      ~GaussianTransitionNetwork.transform_training_data
+   
+   
+
+   
+   
+   

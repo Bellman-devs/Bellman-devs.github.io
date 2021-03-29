@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.policies.planning_policy &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/bellman.html">bellman</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bellman.policies.planning_policy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bellman.policies.planning_policy</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Bellman Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a policy for decision time planning.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Text</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
+<span class="kn">from</span> <span class="nn">tf_agents.policies</span> <span class="kn">import</span> <span class="n">tf_policy</span>
+<span class="kn">from</span> <span class="nn">tf_agents.trajectories</span> <span class="kn">import</span> <span class="n">policy_step</span>
+<span class="kn">from</span> <span class="nn">tf_agents.typing</span> <span class="kn">import</span> <span class="n">types</span>
+
+<span class="kn">from</span> <span class="nn">bellman.distributions.utils</span> <span class="kn">import</span> <span class="n">create_uniform_distribution_from_spec</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.environment_model</span> <span class="kn">import</span> <span class="n">EnvironmentModel</span>
+<span class="kn">from</span> <span class="nn">bellman.trajectory_optimisers.trajectory_optimisers</span> <span class="kn">import</span> <span class="n">TrajectoryOptimiser</span>
+
+
+<div class="viewcode-block" id="PlanningPolicy"><a class="viewcode-back" href="../../../_autosummary/bellman.policies.planning_policy.PlanningPolicy.html#bellman.policies.planning_policy.PlanningPolicy">[docs]</a><span class="k">class</span> <span class="nc">PlanningPolicy</span><span class="p">(</span><span class="n">tf_policy</span><span class="o">.</span><span class="n">TFPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Planning policies take a model of the environment and use it to sample virtual</span>
+<span class="sd">    trajectories, which are used to select the optimal action at the current state. Note that</span>
+<span class="sd">    the computational burden, compared to a parametric policy, is high.</span>
+
+<span class="sd">    Note that for simulating multiple rollouts in the environment we use batches as set by a</span>
+<span class="sd">    `batch_size` parameter. This is in fact the `population_size` parameter common to most</span>
+<span class="sd">    trajectory optimizers. This class makes sure that `batch_size` is set according to</span>
+<span class="sd">    `population_size` parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">environment_model</span><span class="p">:</span> <span class="n">EnvironmentModel</span><span class="p">,</span>
+        <span class="n">trajectory_optimiser</span><span class="p">:</span> <span class="n">TrajectoryOptimiser</span><span class="p">,</span>
+        <span class="n">clip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">emit_log_probability</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">automatic_state_reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">observation_and_action_constraint_splitter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">Splitter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">validate_args</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the class.</span>
+
+<span class="sd">        :param environment_model: An `EnvironmentModel` is a model of the MDP that represents</span>
+<span class="sd">            the environment, consisting of a transition, reward, termination and initial state</span>
+<span class="sd">            distribution model, of which some are trainable and some are fixed.</span>
+<span class="sd">        :param trajectory_optimiser: A `TrajectoryOptimiser` takes an environment model and</span>
+<span class="sd">            optimises a sequence of actions over a given horizon using virtual rollouts.</span>
+<span class="sd">        :param clip: Whether to clip actions to spec before returning them. By default True.</span>
+<span class="sd">        :param emit_log_probability: Emit log-probabilities of actions, if supported. If</span>
+<span class="sd">            True, policy_step.info will have CommonFields.LOG_PROBABILITY set.</span>
+<span class="sd">            Please consult utility methods provided in policy_step for setting and</span>
+<span class="sd">            retrieving these. When working with custom policies, either provide a</span>
+<span class="sd">            dictionary info_spec or a namedtuple with the field &#39;log_probability&#39;.</span>
+<span class="sd">        :param automatic_state_reset:  If `True`, then `get_initial_policy_state` is used</span>
+<span class="sd">            to clear state in `action()` and `distribution()` for for time steps</span>
+<span class="sd">            where `time_step.is_first()`.</span>
+<span class="sd">        :param observation_and_action_constraint_splitter: A function used to process</span>
+<span class="sd">            observations with action constraints. These constraints can indicate,</span>
+<span class="sd">            for example, a mask of valid/invalid actions for a given state of the</span>
+<span class="sd">            environment. The function takes in a full observation and returns a</span>
+<span class="sd">            tuple consisting of 1) the part of the observation intended as input to</span>
+<span class="sd">            the network and 2) the constraint. An example</span>
+<span class="sd">            `observation_and_action_constraint_splitter` could be as simple as: ```</span>
+<span class="sd">            def observation_and_action_constraint_splitter(observation): return</span>
+<span class="sd">              observation[&#39;network_input&#39;], observation[&#39;constraint&#39;] ```</span>
+<span class="sd">            *Note*: when using `observation_and_action_constraint_splitter`, make</span>
+<span class="sd">              sure the provided `q_network` is compatible with the network-specific</span>
+<span class="sd">              half of the output of the</span>
+<span class="sd">              `observation_and_action_constraint_splitter`. In particular,</span>
+<span class="sd">              `observation_and_action_constraint_splitter` will be called on the</span>
+<span class="sd">              observation before passing to the network. If</span>
+<span class="sd">              `observation_and_action_constraint_splitter` is None, action</span>
+<span class="sd">              constraints are not applied.</span>
+<span class="sd">        :param validate_args: Python bool.  Whether to verify inputs to, and outputs of,</span>
+<span class="sd">            functions like `action` and `distribution` against spec structures,</span>
+<span class="sd">            dtypes, and shapes. Research code may prefer to set this value to `False`</span>
+<span class="sd">            to allow iterating on input and output structures without being hamstrung</span>
+<span class="sd">            by overly rigid checking (at the cost of harder-to-debug errors). See also</span>
+<span class="sd">            `TFAgent.validate_args`.</span>
+<span class="sd">        :param name: A name for this module. Defaults to the class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_optimiser</span> <span class="o">=</span> <span class="n">trajectory_optimiser</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span> <span class="o">=</span> <span class="n">environment_model</span>
+
+        <span class="c1"># making sure the batch_size in environment_model is correctly set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_optimiser</span><span class="o">.</span><span class="n">batch_size</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">PlanningPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">time_step_spec</span><span class="o">=</span><span class="n">environment_model</span><span class="o">.</span><span class="n">time_step_spec</span><span class="p">(),</span>
+            <span class="n">action_spec</span><span class="o">=</span><span class="n">environment_model</span><span class="o">.</span><span class="n">action_spec</span><span class="p">(),</span>
+            <span class="n">policy_state_spec</span><span class="o">=</span><span class="p">(),</span>
+            <span class="n">info_spec</span><span class="o">=</span><span class="p">(),</span>
+            <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>
+            <span class="n">emit_log_probability</span><span class="o">=</span><span class="n">emit_log_probability</span><span class="p">,</span>
+            <span class="n">automatic_state_reset</span><span class="o">=</span><span class="n">automatic_state_reset</span><span class="p">,</span>
+            <span class="n">observation_and_action_constraint_splitter</span><span class="o">=</span><span class="n">observation_and_action_constraint_splitter</span><span class="p">,</span>
+            <span class="n">validate_args</span><span class="o">=</span><span class="n">validate_args</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_step</span><span class="p">,</span> <span class="n">policy_state</span><span class="p">):</span>
+        <span class="c1"># Planning subroutine outputs nested structure of distributions or actions. The</span>
+        <span class="c1"># trajectory optimizer will return a sequence of actions, one for each virtual planning</span>
+        <span class="c1"># step. While planners do not currently support batched environments, the TFEnvironment</span>
+        <span class="c1"># expects a batch dimension with length one in this case.</span>
+
+        <span class="c1"># This condition catches initial states for the optimizer that are terminal</span>
+        <span class="c1"># (TF Agents drivers query policies for these states as well), we return random</span>
+        <span class="c1"># sample here (NaN cannot work for both continuous and discrete actions), otherwise</span>
+        <span class="c1"># we call the optimizer.</span>
+        <span class="n">actions_or_distributions</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">time_step</span><span class="o">.</span><span class="n">is_last</span><span class="p">(),</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="n">create_uniform_distribution_from_spec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_spec</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(),</span>
+                <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory_optimiser</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">time_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="p">)[</span>
+                <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_to_distribution</span><span class="p">(</span><span class="n">action_or_distribution</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_or_distribution</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                <span class="c1"># This is an action tensor, so wrap it in a deterministic distribution.</span>
+                <span class="k">return</span> <span class="n">tfp</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">action_or_distribution</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">action_or_distribution</span>
+
+        <span class="n">distributions</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">map_structure</span><span class="p">(</span><span class="n">_to_distribution</span><span class="p">,</span> <span class="n">actions_or_distributions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">policy_step</span><span class="o">.</span><span class="n">PolicyStep</span><span class="p">(</span><span class="n">distributions</span><span class="p">,</span> <span class="n">policy_state</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

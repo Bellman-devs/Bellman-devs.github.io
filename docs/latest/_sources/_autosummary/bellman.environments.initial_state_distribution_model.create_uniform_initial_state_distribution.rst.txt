@@ -1,0 +1,6 @@
+bellman.environments.initial\_state\_distribution\_model.create\_uniform\_initial\_state\_distribution
+======================================================================================================
+
+.. currentmodule:: bellman.environments.initial_state_distribution_model
+
+.. autofunction:: create_uniform_initial_state_distribution

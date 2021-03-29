@@ -1,0 +1,30 @@
+bellman.benchmark.pets
+======================
+
+.. automodule:: bellman.benchmark.pets
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.benchmark.pets.train_eval
+

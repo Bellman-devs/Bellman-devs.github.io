@@ -1,0 +1,31 @@
+bellman.distributions.utils
+===========================
+
+.. automodule:: bellman.distributions.utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      create_uniform_distribution_from_spec
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

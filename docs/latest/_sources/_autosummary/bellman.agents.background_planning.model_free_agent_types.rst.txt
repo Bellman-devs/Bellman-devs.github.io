@@ -1,0 +1,32 @@
+bellman.agents.background\_planning.model\_free\_agent\_types
+=============================================================
+
+.. automodule:: bellman.agents.background_planning.model_free_agent_types
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      ModelFreeAgentType
+   
+   
+
+   
+   
+   
+
+
+

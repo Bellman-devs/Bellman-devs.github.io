@@ -1,0 +1,27 @@
+bellman.environments.transition\_model.keras\_model.transition\_model\_types.TransitionModelType
+================================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.transition_model_types
+
+.. autoclass:: TransitionModelType
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TransitionModelType.Deterministic
+      ~TransitionModelType.DeterministicEnsemble
+      ~TransitionModelType.Probabilistic
+      ~TransitionModelType.ProbabilisticEnsemble
+   
+   

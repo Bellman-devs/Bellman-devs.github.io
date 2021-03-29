@@ -1,0 +1,49 @@
+bellman.policies.cross\_entropy\_method\_policy.CrossEntropyMethodPolicy
+========================================================================
+
+.. currentmodule:: bellman.policies.cross_entropy_method_policy
+
+.. autoclass:: CrossEntropyMethodPolicy
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~CrossEntropyMethodPolicy.action
+      ~CrossEntropyMethodPolicy.distribution
+      ~CrossEntropyMethodPolicy.get_initial_state
+      ~CrossEntropyMethodPolicy.update
+      ~CrossEntropyMethodPolicy.variables
+      ~CrossEntropyMethodPolicy.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CrossEntropyMethodPolicy.action_spec
+      ~CrossEntropyMethodPolicy.collect_data_spec
+      ~CrossEntropyMethodPolicy.emit_log_probability
+      ~CrossEntropyMethodPolicy.info_spec
+      ~CrossEntropyMethodPolicy.name
+      ~CrossEntropyMethodPolicy.name_scope
+      ~CrossEntropyMethodPolicy.observation_and_action_constraint_splitter
+      ~CrossEntropyMethodPolicy.policy_state_spec
+      ~CrossEntropyMethodPolicy.policy_step_spec
+      ~CrossEntropyMethodPolicy.submodules
+      ~CrossEntropyMethodPolicy.time_step_spec
+      ~CrossEntropyMethodPolicy.trainable_variables
+      ~CrossEntropyMethodPolicy.trajectory_spec
+      ~CrossEntropyMethodPolicy.validate_args
+   
+   

@@ -1,0 +1,563 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.agents.background_planning.background_planning_agent &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/bellman.html">bellman</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bellman.agents.background_planning.background_planning_agent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bellman.agents.background_planning.background_planning_agent</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Bellman Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A background planning agent which trains a model-free agent virtually with samples from an</span>
+<span class="sd">approximate MDP in accordance with Sutton and Barto 2017. Note that the definition of background</span>
+<span class="sd">planning is usually more general and refers to any algorithm that improves / trains a policy</span>
+<span class="sd">based on model predictions and is not a decision-time planner. Here, we are explicitly referring to</span>
+<span class="sd">the setting where any model-free agent can be trained virtually inside of a model.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tf_agents.agents</span> <span class="kn">import</span> <span class="n">DdpgAgent</span><span class="p">,</span> <span class="n">SacAgent</span><span class="p">,</span> <span class="n">Td3Agent</span><span class="p">,</span> <span class="n">TFAgent</span>
+<span class="kn">from</span> <span class="nn">tf_agents.agents.ppo.ppo_clip_agent</span> <span class="kn">import</span> <span class="n">PPOClipAgent</span>
+<span class="kn">from</span> <span class="nn">tf_agents.agents.tf_agent</span> <span class="kn">import</span> <span class="n">LossInfo</span>
+<span class="kn">from</span> <span class="nn">tf_agents.typing.types</span> <span class="kn">import</span> <span class="n">NestedTensor</span><span class="p">,</span> <span class="n">Tensor</span>
+
+<span class="kn">from</span> <span class="nn">bellman.agents.components</span> <span class="kn">import</span> <span class="n">ModelFreeAgentComponent</span>
+<span class="kn">from</span> <span class="nn">bellman.agents.model_based_agent</span> <span class="kn">import</span> <span class="n">ModelBasedAgent</span>
+<span class="kn">from</span> <span class="nn">bellman.agents.trpo.trpo_agent</span> <span class="kn">import</span> <span class="n">TRPOAgent</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.environment_model</span> <span class="kn">import</span> <span class="n">EnvironmentModel</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.initial_state_distribution_model</span> <span class="kn">import</span> <span class="n">InitialStateDistributionModel</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.reward_model</span> <span class="kn">import</span> <span class="n">RewardModel</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.termination_model</span> <span class="kn">import</span> <span class="n">ConstantFalseTermination</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.transition_model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TrainableTransitionModel</span><span class="p">,</span>
+    <span class="n">TransitionModel</span><span class="p">,</span>
+    <span class="n">TransitionModelTrainingSpec</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.utils</span> <span class="kn">import</span> <span class="n">virtual_rollouts_buffer_and_driver</span>
+<span class="kn">from</span> <span class="nn">bellman.training.utils</span> <span class="kn">import</span> <span class="n">TRAIN_ARGSPEC_COMPONENT_ID</span>
+
+
+<div class="viewcode-block" id="BackgroundPlanningAgent"><a class="viewcode-back" href="../../../../_autosummary/bellman.agents.background_planning.background_planning_agent.BackgroundPlanningAgent.html#bellman.agents.background_planning.background_planning_agent.BackgroundPlanningAgent">[docs]</a><span class="k">class</span> <span class="nc">BackgroundPlanningAgent</span><span class="p">(</span><span class="n">ModelBasedAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An agent for background planning. The agent is assumed to have an internal environment model</span>
+<span class="sd">    and an internal model-free agent that can both be trained through a single train method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">transition_model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="n">TrainableTransitionModel</span><span class="p">,</span> <span class="n">TransitionModelTrainingSpec</span><span class="p">],</span> <span class="n">TransitionModel</span>
+        <span class="p">],</span>
+        <span class="n">reward_model</span><span class="p">:</span> <span class="n">RewardModel</span><span class="p">,</span>
+        <span class="n">initial_state_distribution_model</span><span class="p">:</span> <span class="n">InitialStateDistributionModel</span><span class="p">,</span>
+        <span class="n">model_free_agent</span><span class="p">:</span> <span class="n">TFAgent</span><span class="p">,</span>
+        <span class="n">planner_batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">planning_horizon</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">model_free_training_iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">debug_summaries</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">train_step_counter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param transition_model: A component of the environment model that describes the</span>
+<span class="sd">            transition dynamics. Either a tuple containing a trainable transition model together</span>
+<span class="sd">            with training specs, or a pre-specified transition model.</span>
+<span class="sd">        :param reward_model: A component of the environment model that describes the</span>
+<span class="sd">            rewards. At the moment only pre-specified reward models are allowed, i.e. the agent</span>
+<span class="sd">            assumes the reward function is known.</span>
+<span class="sd">        :param initial_state_distribution_model: A component of the environment model that</span>
+<span class="sd">            describes the initial state distribution (can be both deterministic or</span>
+<span class="sd">            probabilistic). At the moment only pre-specified initial state distribution models</span>
+<span class="sd">            are allowed, i.e. the agent assumes the initial state distribution is known.</span>
+<span class="sd">        :param model_free_agent: model-free agent that is trained virtually with samples from the</span>
+<span class="sd">            model. Could be for example PPO or TRPO which are on-policy, as well as DDPG, SAC or</span>
+<span class="sd">            TD3 which are off-policy.</span>
+<span class="sd">        :param planner_batch_size: Number of parallel virtual trajectories.</span>
+<span class="sd">        :param planning_horizon: Number of steps taken in the environment in each virtual rollout.</span>
+<span class="sd">        :param model_free_training_iterations: Number of model-free training iterations per each</span>
+<span class="sd">            train-call.</span>
+<span class="sd">        :param debug_summaries: A bool; if true, subclasses should gather debug summaries.</span>
+<span class="sd">        :param train_step_counter: An optional counter to increment every time the train op is run.</span>
+<span class="sd">            Defaults to the global_step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">planner_batch_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Planner batch size must be positive.&quot;</span>
+        <span class="k">assert</span> <span class="n">planning_horizon</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Planning horizon must be positive.&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">model_free_training_iterations</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="p">),</span> <span class="s2">&quot;Model-free train iterations must be positive.&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_model_free_agent</span><span class="p">(</span><span class="n">model_free_agent</span><span class="p">)</span>
+
+        <span class="c1"># for setting up the environment model and policy</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transition_model</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">_transition_model</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">transition_model</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_transition_model</span> <span class="o">=</span> <span class="n">transition_model</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">_transition_model</span><span class="o">.</span><span class="n">observation_space_spec</span>
+            <span class="o">==</span> <span class="n">model_free_agent</span><span class="o">.</span><span class="n">time_step_spec</span><span class="o">.</span><span class="n">observation</span>
+        <span class="p">),</span> <span class="s2">&quot;Transition model observation spec needs to match the model-free agent&#39;s one.&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">_transition_model</span><span class="o">.</span><span class="n">action_space_spec</span> <span class="o">==</span> <span class="n">model_free_agent</span><span class="o">.</span><span class="n">action_spec</span>
+        <span class="p">),</span> <span class="s2">&quot;Transition model action spec needs to match the model-free agent&#39;s one.&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model_free_agent</span><span class="o">.</span><span class="n">time_step_spec</span><span class="p">,</span>
+            <span class="n">model_free_agent</span><span class="o">.</span><span class="n">action_spec</span><span class="p">,</span>
+            <span class="n">transition_model</span><span class="p">,</span>
+            <span class="n">reward_model</span><span class="p">,</span>
+            <span class="n">ConstantFalseTermination</span><span class="p">(</span><span class="n">_transition_model</span><span class="o">.</span><span class="n">observation_space_spec</span><span class="p">),</span>
+            <span class="n">initial_state_distribution_model</span><span class="p">,</span>
+            <span class="n">model_free_agent</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+            <span class="n">model_free_agent</span><span class="o">.</span><span class="n">collect_policy</span><span class="p">,</span>
+            <span class="n">debug_summaries</span><span class="o">=</span><span class="n">debug_summaries</span><span class="p">,</span>
+            <span class="n">train_step_counter</span><span class="o">=</span><span class="n">train_step_counter</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">environment_model</span> <span class="o">=</span> <span class="n">EnvironmentModel</span><span class="p">(</span>
+            <span class="n">transition_model</span><span class="o">=</span><span class="n">_transition_model</span><span class="p">,</span>
+            <span class="n">reward_model</span><span class="o">=</span><span class="n">reward_model</span><span class="p">,</span>
+            <span class="n">termination_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">termination_model</span><span class="p">,</span>
+            <span class="n">initial_state_distribution_model</span><span class="o">=</span><span class="n">initial_state_distribution_model</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">planner_batch_size</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_replay_buffer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_driver</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">virtual_rollouts_buffer_and_driver</span><span class="p">(</span>
+            <span class="n">environment_model</span><span class="p">,</span> <span class="n">model_free_agent</span><span class="o">.</span><span class="n">collect_policy</span><span class="p">,</span> <span class="n">planning_horizon</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_free_agent</span> <span class="o">=</span> <span class="n">model_free_agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_free_training_iterations</span> <span class="o">=</span> <span class="n">model_free_training_iterations</span>
+
+    <span class="k">def</span> <span class="nf">_assert_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_free_agent</span><span class="p">:</span> <span class="n">TFAgent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that the model-free agent is of the correct type.</span>
+<span class="sd">        :param model_free_agent: model-free agent that is trained virtually with samples from the</span>
+<span class="sd">            model. Could be for example PPO or TRPO which are on-policy, as well as DDPG, SAC or</span>
+<span class="sd">            TD3 which are off-policy.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_train_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">:</span> <span class="n">NestedTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LossInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the model-free agent virtually for multiple iterations.</span>
+<span class="sd">        :param experience: A batch of experience data in the form of a `Trajectory`.</span>
+<span class="sd">            All tensors in `experience` must be shaped `[batch, time, ...]`. Importantly,</span>
+<span class="sd">            this is real-world experience and the agent needs to decide how to leverage this</span>
+<span class="sd">            real-world experience for virtual training using the environment model.</span>
+<span class="sd">        :return: A `LossInfo` tuples containing loss and info tensors of a trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_train</span><span class="p">(</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">:</span> <span class="n">NestedTensor</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LossInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train one or more of the models composing the environment model.</span>
+
+<span class="sd">        :param experience: A batch of experience data in the form of a `Trajectory`.</span>
+<span class="sd">            All tensors in `experience` must be shaped `[batch, time, ...]`.</span>
+<span class="sd">        :param weights: Optional scalar or element-wise (per-batch-entry) importance</span>
+<span class="sd">            weights. Not used at the moment.</span>
+<span class="sd">        :param kwargs: A dictionary that contains a key with a string tensor value indicating</span>
+<span class="sd">            which model should be trained.</span>
+
+<span class="sd">        :return: A `LossInfo` tuples containing loss and info tensors of a trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trainable_component_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">TRAIN_ARGSPEC_COMPONENT_ID</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">trainable_component_name</span> <span class="o">==</span> <span class="n">ModelFreeAgentComponent</span><span class="o">.</span><span class="n">MODEL_FREE_AGENT</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">numpy</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_train_step_counter</span><span class="o">.</span><span class="n">assign_add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_model_free_agent</span><span class="p">(</span><span class="n">experience</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_train</span><span class="p">(</span><span class="n">experience</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OnPolicyBackgroundPlanningAgent"><a class="viewcode-back" href="../../../../_autosummary/bellman.agents.background_planning.background_planning_agent.OnPolicyBackgroundPlanningAgent.html#bellman.agents.background_planning.background_planning_agent.OnPolicyBackgroundPlanningAgent">[docs]</a><span class="k">class</span> <span class="nc">OnPolicyBackgroundPlanningAgent</span><span class="p">(</span><span class="n">BackgroundPlanningAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An agent for background planning with an internal on-policy model-free agent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_assert_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_free_agent</span><span class="p">:</span> <span class="n">TFAgent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that the model-free agent is of the correct type.</span>
+<span class="sd">        :param model_free_agent: model-free agent that is trained virtually with samples from the</span>
+<span class="sd">            model. For now PPO and TRPO are supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_free_agent</span><span class="p">,</span> <span class="p">(</span><span class="n">PPOClipAgent</span><span class="p">,</span> <span class="n">TRPOAgent</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_train_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">:</span> <span class="n">NestedTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LossInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the model-free agent virtually for multiple iterations.</span>
+<span class="sd">        :param experience: A batch of experience data in the form of a `Trajectory`.</span>
+<span class="sd">            All tensors in `experience` must be shaped `[batch, time, ...]`. Importantly,</span>
+<span class="sd">            this is real-world experience and the agent needs to decide how to leverage this</span>
+<span class="sd">            real-world experience for virtual training using the environment model.</span>
+<span class="sd">        :return: A `LossInfo` tuples containing loss and info tensors of a trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;The real environment has batch size 1.&quot;</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">experience</span><span class="o">.</span><span class="n">is_boundary</span><span class="p">()</span>  <span class="c1"># [batch, time, ...]</span>
+        <span class="n">masked_observation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span>
+            <span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span> <span class="n">mask</span>
+        <span class="p">)</span>  <span class="c1"># [reduced batch, ...]</span>
+
+        <span class="n">model_free_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_free_training_iterations</span><span class="p">):</span>
+            <span class="n">random_indexes</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+                <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,),</span>
+                <span class="n">maxval</span><span class="o">=</span><span class="n">masked_observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">initial_observation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+                <span class="n">masked_observation</span><span class="p">,</span> <span class="n">random_indexes</span>
+            <span class="p">)</span>  <span class="c1"># [env model batch, ...]</span>
+
+            <span class="n">initial_time_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="o">.</span><span class="n">set_initial_observation</span><span class="p">(</span>
+                <span class="n">initial_observation</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_driver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">initial_time_step</span><span class="p">)</span>
+
+            <span class="n">policy_experience</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_replay_buffer</span><span class="o">.</span><span class="n">gather_all</span><span class="p">()</span>
+            <span class="n">model_free_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_free_agent</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">policy_experience</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_replay_buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="n">loss_info</span> <span class="o">=</span> <span class="n">LossInfo</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">model_free_losses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">model_free_losses</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">loss_info</span></div>
+
+
+<div class="viewcode-block" id="OffPolicyBackgroundPlanningAgent"><a class="viewcode-back" href="../../../../_autosummary/bellman.agents.background_planning.background_planning_agent.OffPolicyBackgroundPlanningAgent.html#bellman.agents.background_planning.background_planning_agent.OffPolicyBackgroundPlanningAgent">[docs]</a><span class="k">class</span> <span class="nc">OffPolicyBackgroundPlanningAgent</span><span class="p">(</span><span class="n">BackgroundPlanningAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An agent for off-policy background planning with an internal off-policy model-free agent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">transition_model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="n">TrainableTransitionModel</span><span class="p">,</span> <span class="n">TransitionModelTrainingSpec</span><span class="p">],</span> <span class="n">TransitionModel</span>
+        <span class="p">],</span>
+        <span class="n">reward_model</span><span class="p">:</span> <span class="n">RewardModel</span><span class="p">,</span>
+        <span class="n">initial_state_distribution_model</span><span class="p">:</span> <span class="n">InitialStateDistributionModel</span><span class="p">,</span>
+        <span class="n">model_free_agent</span><span class="p">:</span> <span class="n">TFAgent</span><span class="p">,</span>
+        <span class="n">planner_batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">planning_horizon</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">model_free_training_iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">virtual_sample_batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">debug_summaries</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">train_step_counter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param transition_model: A component of the environment model that describes the</span>
+<span class="sd">            transition dynamics. Either a tuple containing a trainable transition model together</span>
+<span class="sd">            with training specs, or a pre-specified transition model.</span>
+<span class="sd">        :param reward_model: A component of the environment model that describes the</span>
+<span class="sd">            rewards. At the moment only pre-specified reward models are allowed, i.e. the agent</span>
+<span class="sd">            assumes the reward function is known.</span>
+<span class="sd">        :param initial_state_distribution_model: A component of the environment model that</span>
+<span class="sd">            describes the initial state distribution (can be both deterministic or</span>
+<span class="sd">            probabilistic). At the moment only pre-specified initial state distribution models</span>
+<span class="sd">            are allowed, i.e. the agent assumes the initial state distribution is known.</span>
+<span class="sd">        :param model_free_agent: off-policy model-free agent that is trained virtually with samples</span>
+<span class="sd">            from the model. Could be for example DDPG, TD3 or SAC.</span>
+<span class="sd">        :param planner_batch_size: Number of parallel virtual trajectories.</span>
+<span class="sd">        :param planning_horizon: Number of steps taken in the environment in each virtual rollout.</span>
+<span class="sd">        :param model_free_training_iterations: Number of model-free training iterations per each</span>
+<span class="sd">            train-call.</span>
+<span class="sd">        :param virtual_sample_batch_size: sample batch size for virtually training the off-policy</span>
+<span class="sd">            model-free agent.</span>
+<span class="sd">        :param debug_summaries: A bool; if true, subclasses should gather debug summaries.</span>
+<span class="sd">        :param train_step_counter: An optional counter to increment every time the train op is run.</span>
+<span class="sd">            Defaults to the global_step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">virtual_sample_batch_size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">transition_model</span><span class="p">,</span>
+            <span class="n">reward_model</span><span class="p">,</span>
+            <span class="n">initial_state_distribution_model</span><span class="p">,</span>
+            <span class="n">model_free_agent</span><span class="p">,</span>
+            <span class="n">planner_batch_size</span><span class="p">,</span>
+            <span class="n">planning_horizon</span><span class="p">,</span>
+            <span class="n">model_free_training_iterations</span><span class="p">,</span>
+            <span class="n">debug_summaries</span><span class="o">=</span><span class="n">debug_summaries</span><span class="p">,</span>
+            <span class="n">train_step_counter</span><span class="o">=</span><span class="n">train_step_counter</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_not_boundary</span><span class="p">(</span><span class="n">trajectories</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+            <span class="n">condition_1</span> <span class="o">=</span> <span class="o">~</span><span class="n">trajectories</span><span class="o">.</span><span class="n">is_boundary</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">condition_2</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="o">~</span><span class="n">trajectories</span><span class="o">.</span><span class="n">is_last</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">is_first</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">)</span>  <span class="c1"># to be on the safe side...</span>
+            <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">condition_1</span><span class="p">,</span> <span class="n">condition_2</span><span class="p">)</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_replay_buffer</span><span class="o">.</span><span class="n">as_dataset</span><span class="p">(</span><span class="n">num_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">_not_boundary</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">virtual_sample_batch_size</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_assert_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_free_agent</span><span class="p">:</span> <span class="n">TFAgent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that the model-free agent is of the correct type.</span>
+<span class="sd">        :param model_free_agent: model-free agent that is trained virtually with samples from the</span>
+<span class="sd">            model. For now, DDPG, SAC and TD3 are supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_free_agent</span><span class="p">,</span> <span class="p">(</span><span class="n">DdpgAgent</span><span class="p">,</span> <span class="n">SacAgent</span><span class="p">,</span> <span class="n">Td3Agent</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_train_model_free_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">:</span> <span class="n">NestedTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LossInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the model-free agent virtually for multiple iterations.</span>
+<span class="sd">        :param experience: A batch of experience data in the form of a `Trajectory`.</span>
+<span class="sd">            All tensors in `experience` must be shaped `[batch, time, ...]`. Importantly,</span>
+<span class="sd">            this is real-world experience and the agent needs to decide how to leverage this</span>
+<span class="sd">            real-world experience for virtual training using the environment model.</span>
+<span class="sd">        :return: A `LossInfo` tuples containing loss and info tensors of a trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;The real environment has batch size 1.&quot;</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">experience</span><span class="o">.</span><span class="n">is_boundary</span><span class="p">()</span>  <span class="c1"># [batch, time, ...]</span>
+        <span class="n">masked_observation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">boolean_mask</span><span class="p">(</span>
+            <span class="n">experience</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span> <span class="n">mask</span>
+        <span class="p">)</span>  <span class="c1"># [reduced batch, ...]</span>
+
+        <span class="n">ridx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,),</span>
+            <span class="n">maxval</span><span class="o">=</span><span class="n">masked_observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">initial_observation</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">masked_observation</span><span class="p">,</span> <span class="n">ridx</span><span class="p">)</span>  <span class="c1"># [env batch, ...]</span>
+
+        <span class="n">initial_time_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_environment_model</span><span class="o">.</span><span class="n">set_initial_observation</span><span class="p">(</span>
+            <span class="n">initial_observation</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_rollouts_driver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">initial_time_step</span><span class="p">)</span>
+
+        <span class="n">model_free_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_free_training_iterations</span><span class="p">):</span>
+            <span class="n">policy_experience</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iterator</span><span class="p">)</span>
+            <span class="n">model_free_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_free_agent</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">policy_experience</span><span class="p">))</span>
+
+        <span class="n">loss_info</span> <span class="o">=</span> <span class="n">LossInfo</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">model_free_losses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">model_free_losses</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">loss_info</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+bellman.agents.trpo.trpo\_agent
+===============================
+
+.. automodule:: bellman.agents.trpo.trpo_agent
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      compute_return_and_advantage
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      TRPOAgent
+      TRPOLossInfo
+   
+   
+
+   
+   
+   
+
+
+

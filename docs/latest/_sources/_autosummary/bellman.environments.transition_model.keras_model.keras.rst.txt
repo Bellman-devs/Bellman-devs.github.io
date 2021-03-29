@@ -1,0 +1,33 @@
+bellman.environments.transition\_model.keras\_model.keras
+=========================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model.keras
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      KerasTrainingSpec
+      KerasTransitionModel
+   
+   
+
+   
+   
+   
+
+
+

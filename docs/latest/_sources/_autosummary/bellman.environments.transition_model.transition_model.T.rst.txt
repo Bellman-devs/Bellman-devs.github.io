@@ -1,0 +1,6 @@
+bellman.environments.transition\_model.transition\_model.T
+==========================================================
+
+.. currentmodule:: bellman.environments.transition_model.transition_model
+
+.. autodata:: T

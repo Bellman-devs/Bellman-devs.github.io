@@ -1,0 +1,6 @@
+bellman.environments.transition\_model.keras\_model.probabilistic.negloglik
+===========================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.probabilistic
+
+.. autofunction:: negloglik

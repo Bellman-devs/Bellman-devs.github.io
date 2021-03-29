@@ -1,0 +1,29 @@
+bellman.environments.transition\_model.keras\_model.linear.LinearTransitionNetwork
+==================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.linear
+
+.. autoclass:: LinearTransitionNetwork
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~LinearTransitionNetwork.build_model
+      ~LinearTransitionNetwork.gen_hidden_dense_layers
+      ~LinearTransitionNetwork.loss
+      ~LinearTransitionNetwork.metrics
+      ~LinearTransitionNetwork.transform_training_data
+   
+   
+
+   
+   
+   

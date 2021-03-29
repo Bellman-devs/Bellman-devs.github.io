@@ -1,0 +1,34 @@
+bellman.agents.background\_planning.background\_planning\_agent
+===============================================================
+
+.. automodule:: bellman.agents.background_planning.background_planning_agent
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      BackgroundPlanningAgent
+      OffPolicyBackgroundPlanningAgent
+      OnPolicyBackgroundPlanningAgent
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,32 @@
+bellman.agents.mbpo.mbpo\_agent
+===============================
+
+.. automodule:: bellman.agents.mbpo.mbpo_agent
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      MbpoAgent
+   
+   
+
+   
+   
+   
+
+
+

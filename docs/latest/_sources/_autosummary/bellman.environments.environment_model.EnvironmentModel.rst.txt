@@ -1,0 +1,41 @@
+bellman.environments.environment\_model.EnvironmentModel
+========================================================
+
+.. currentmodule:: bellman.environments.environment_model
+
+.. autoclass:: EnvironmentModel
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~EnvironmentModel.action_spec
+      ~EnvironmentModel.current_time_step
+      ~EnvironmentModel.observation_spec
+      ~EnvironmentModel.render
+      ~EnvironmentModel.reset
+      ~EnvironmentModel.reward_spec
+      ~EnvironmentModel.set_initial_observation
+      ~EnvironmentModel.step
+      ~EnvironmentModel.time_step_spec
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~EnvironmentModel.batch_size
+      ~EnvironmentModel.batched
+      ~EnvironmentModel.termination_model
+   
+   

@@ -1,0 +1,29 @@
+bellman.environments.transition\_model.keras\_model.multilayer.MultilayerFcTransitionNetwork
+============================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.multilayer
+
+.. autoclass:: MultilayerFcTransitionNetwork
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~MultilayerFcTransitionNetwork.build_model
+      ~MultilayerFcTransitionNetwork.gen_hidden_dense_layers
+      ~MultilayerFcTransitionNetwork.loss
+      ~MultilayerFcTransitionNetwork.metrics
+      ~MultilayerFcTransitionNetwork.transform_training_data
+   
+   
+
+   
+   
+   

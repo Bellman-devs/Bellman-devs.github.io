@@ -1,0 +1,32 @@
+bellman.environments.transition\_model.keras\_model.factory\_methods
+====================================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model.factory_methods
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      build_trajectory_sampler_from_type
+      build_transition_model_and_training_spec_from_type
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,35 @@
+bellman.environments.transition\_model.transition\_model.TrainableTransitionModel
+=================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.transition_model
+
+.. autoclass:: TrainableTransitionModel
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~TrainableTransitionModel.step
+      ~TrainableTransitionModel.train
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TrainableTransitionModel.action_space_spec
+      ~TrainableTransitionModel.latent_observation_space_spec
+      ~TrainableTransitionModel.observation_space_spec
+      ~TrainableTransitionModel.predict_state_difference
+   
+   

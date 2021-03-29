@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.agents.mepo.mepo_agent &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/bellman.html">bellman</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bellman.agents.mepo.mepo_agent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bellman.agents.mepo.mepo_agent</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Bellman Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot; A Model Ensemble Policy Optimization Agent.</span>
+
+<span class="sd">Implements the Model Ensemble Policy Optimization algorithm from:</span>
+
+<span class="sd">Kurutach et al. (2018) &quot;Model-Ensemble Trust-Region Policy Optimization&quot;,</span>
+<span class="sd">which can be found at https://arxiv.org/pdf/1802.10592.pdf</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">gin</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tf_agents.agents.ppo.ppo_clip_agent</span> <span class="kn">import</span> <span class="n">PPOClipAgent</span>
+<span class="kn">from</span> <span class="nn">tf_agents.networks.actor_distribution_network</span> <span class="kn">import</span> <span class="n">ActorDistributionNetwork</span>
+<span class="kn">from</span> <span class="nn">tf_agents.networks.value_network</span> <span class="kn">import</span> <span class="n">ValueNetwork</span>
+<span class="kn">from</span> <span class="nn">tf_agents.trajectories</span> <span class="kn">import</span> <span class="n">time_step</span> <span class="k">as</span> <span class="n">ts</span>
+<span class="kn">from</span> <span class="nn">tf_agents.typing</span> <span class="kn">import</span> <span class="n">types</span>
+
+<span class="kn">from</span> <span class="nn">bellman.agents.background_planning.background_planning_agent</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OnPolicyBackgroundPlanningAgent</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.agents.background_planning.model_free_agent_types</span> <span class="kn">import</span> <span class="n">ModelFreeAgentType</span>
+<span class="kn">from</span> <span class="nn">bellman.agents.trpo.trpo_agent</span> <span class="kn">import</span> <span class="n">TRPOAgent</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.initial_state_distribution_model</span> <span class="kn">import</span> <span class="n">InitialStateDistributionModel</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.reward_model</span> <span class="kn">import</span> <span class="n">RewardModel</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.keras_model.factory_methods</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">build_trajectory_sampler_from_type</span><span class="p">,</span>
+    <span class="n">build_transition_model_and_training_spec_from_type</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.keras_model.trajectory_sampler_types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TrajectorySamplerType</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.keras_model.trajectory_sampling</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TrajectorySamplingStrategy</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.keras_model.transition_model_types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TransitionModelType</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="MepoAgent"><a class="viewcode-back" href="../../../../_autosummary/bellman.agents.mepo.mepo_agent.MepoAgent.html#bellman.agents.mepo.mepo_agent.MepoAgent">[docs]</a><span class="nd">@gin</span><span class="o">.</span><span class="n">configurable</span>
+<span class="k">class</span> <span class="nc">MepoAgent</span><span class="p">(</span><span class="n">OnPolicyBackgroundPlanningAgent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An MEPO agent.</span>
+
+<span class="sd">    This implementation follows the algorithm proposed in the original article, but importantly</span>
+<span class="sd">    allowing for both TRPO and PPO as model-free on-policy algorithms. It assumes a trainable</span>
+<span class="sd">    transition model, while the reward model, termination model and initial state distribution are</span>
+<span class="sd">    fixed. The transition model structure is pre-specified as a fully connected multi-layer neural</span>
+<span class="sd">    network implemented in Keras - one can specify parameters such as the number of layers and</span>
+<span class="sd">    hidden nodes in each layer. Several types of transition models are available (e.g. ensemble and</span>
+<span class="sd">    non-ensemble versions), as well as several types of trajectory samplers. The original paper</span>
+<span class="sd">    uses TS1, but TSinf and TSmean are also possible. The actor and critic network structure of the</span>
+<span class="sd">    model-free agent is assumed to be the same, but can be configured in terms of the number of</span>
+<span class="sd">    hidden layers and nodes per hidden layer. If more flexibility is desired, one should</span>
+<span class="sd">    use the `OnPolicyBackgroundPlanningAgent` class instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">time_step_spec</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">TimeStep</span><span class="p">,</span>
+        <span class="n">action_spec</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">NestedTensorSpec</span><span class="p">,</span>
+        <span class="n">transition_model_type</span><span class="p">:</span> <span class="n">TransitionModelType</span><span class="p">,</span>
+        <span class="n">num_hidden_layers_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_hidden_nodes_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">activation_function_model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">ensemble_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">predict_state_difference</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">training_batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">Callback</span><span class="p">],</span>
+        <span class="n">reward_model</span><span class="p">:</span> <span class="n">RewardModel</span><span class="p">,</span>
+        <span class="n">initial_state_distribution_model</span><span class="p">:</span> <span class="n">InitialStateDistributionModel</span><span class="p">,</span>
+        <span class="n">trajectory_sampler_type</span><span class="p">:</span> <span class="n">TrajectorySamplerType</span><span class="p">,</span>
+        <span class="n">horizon</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">model_free_agent_type</span><span class="p">:</span> <span class="n">ModelFreeAgentType</span><span class="p">,</span>
+        <span class="n">num_hidden_layers_agent</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_hidden_nodes_agent</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">activation_function_agent</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">model_free_training_iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">debug_summaries</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">train_step_counter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the agent</span>
+
+<span class="sd">        :param time_step_spec: A nest of tf.TypeSpec representing the time_steps.</span>
+<span class="sd">        :param action_spec: A nest of BoundedTensorSpec representing the actions.</span>
+<span class="sd">        :param transition_model_type: An indicator which of the available transition models</span>
+<span class="sd">            should be used - list can be found in `TransitionModelType`. A component of the</span>
+<span class="sd">            environment model that describes the transition dynamics.</span>
+<span class="sd">        :param num_hidden_layers_model: A transition model parameter, used for constructing a neural</span>
+<span class="sd">            network. A number of hidden layers in the neural network.</span>
+<span class="sd">        :param num_hidden_nodes_model: A transition model parameter, used for constructing a neural</span>
+<span class="sd">            network. A number of nodes in each hidden layer. Parameter is shared across all layers.</span>
+<span class="sd">        :param activation_function_model: A transition model parameter, used for constructing a</span>
+<span class="sd">            neural network. An activation function of the hidden nodes.</span>
+<span class="sd">        :param ensemble_size: A transition model parameter, used for constructing a neural</span>
+<span class="sd">            network. The number of networks in the ensemble.</span>
+<span class="sd">        :param predict_state_difference: A transition model parameter, used for constructing a</span>
+<span class="sd">            neural network. A boolean indicating whether transition model will be predicting a</span>
+<span class="sd">            difference between current and a next state or the next state directly.</span>
+<span class="sd">        :param epochs: A transition model parameter, used by Keras fit method. A number of epochs</span>
+<span class="sd">            used for training the neural network.</span>
+<span class="sd">        :param training_batch_size: A transition model parameter, used by Keras fit method. A</span>
+<span class="sd">            batch size used for training the neural network.</span>
+<span class="sd">        :param callbacks: A transition model parameter, used by Keras fit method. A list of Keras</span>
+<span class="sd">            callbacks used for training the neural network.</span>
+<span class="sd">        :param reward_model: A component of the environment model that describes the</span>
+<span class="sd">            rewards. At the moment only pre-specified reward models are allowed, i.e. agent</span>
+<span class="sd">            assumes reward function is known.</span>
+<span class="sd">        :param initial_state_distribution_model: A component of the environment model that</span>
+<span class="sd">            describes the initial state distribution (can be both deterministic or</span>
+<span class="sd">            probabilistic). At the moment only pre-specified initial state distribution models</span>
+<span class="sd">            are allowed, i.e. agent assumes initial state distribution is known.</span>
+<span class="sd">        :param trajectory_sampler_type: An indicator which of the available trajectory samplers</span>
+<span class="sd">            should be used - list can be found in `TrajectorySamplerType`. Trajectory sampler</span>
+<span class="sd">            determines how predictions from an ensemble of neural networks that model the</span>
+<span class="sd">            transition dynamics are sampled. Works only with ensemble type of transition models.</span>
+<span class="sd">        :param horizon: A trajectory optimiser parameter. The number of steps taken in the</span>
+<span class="sd">            environment in each virtual rollout.</span>
+<span class="sd">        :param population_size: A trajectory optimiser parameter. The number of virtual rollouts</span>
+<span class="sd">            that are simulated in each iteration during trajectory optimization.</span>
+<span class="sd">        :param model_free_agent_type: Type of model-free agent, e.g. PPO or TRPO.</span>
+<span class="sd">        :param num_hidden_layers_agent: A model-free agent parameter, used for constructing neural</span>
+<span class="sd">            networks for actor and critic. A number of hidden layers in the neural network.</span>
+<span class="sd">        :param num_hidden_nodes_agent: A model-free agent parameter, used for constructing neural</span>
+<span class="sd">            networks for actor and critic. A number of nodes in each hidden layer. Parameter is</span>
+<span class="sd">            shared across all layers.</span>
+<span class="sd">        :param activation_function_agent: A model-free agent parameter, used for constructing a</span>
+<span class="sd">            neural network. An activation function of the hidden nodes.</span>
+<span class="sd">        :param model_free_training_iterations: Number of model-free training iterations per each</span>
+<span class="sd">            train-call.</span>
+<span class="sd">        :param debug_summaries: A bool; if true, subclasses should gather debug summaries.</span>
+<span class="sd">        :param train_step_counter: An optional counter to increment every time the train op is run.</span>
+<span class="sd">            Defaults to the global_step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="n">ensemble_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ensemble_size must be an integer &gt; 0&quot;</span>
+        <span class="k">assert</span> <span class="n">num_hidden_layers_agent</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">num_hidden_layers_agent</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">num_hidden_nodes_agent</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensemble_size</span> <span class="o">=</span> <span class="n">ensemble_size</span>
+        <span class="n">observation_spec</span> <span class="o">=</span> <span class="n">time_step_spec</span><span class="o">.</span><span class="n">observation</span>
+
+        <span class="c1"># trajectory sampler (meaningful only for ensemble models)</span>
+        <span class="n">trajectory_sampler</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TrajectorySamplingStrategy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">transition_model_type</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">TransitionModelType</span><span class="o">.</span><span class="n">DeterministicEnsemble</span><span class="p">,</span>
+            <span class="n">TransitionModelType</span><span class="o">.</span><span class="n">ProbabilisticEnsemble</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">trajectory_sampler</span> <span class="o">=</span> <span class="n">build_trajectory_sampler_from_type</span><span class="p">(</span>
+                <span class="n">ensemble_size</span><span class="o">=</span><span class="n">ensemble_size</span><span class="p">,</span>
+                <span class="n">trajectory_sampler_type</span><span class="o">=</span><span class="n">trajectory_sampler_type</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># transition dynamics model plus training spec</span>
+        <span class="n">transition_model</span><span class="p">,</span> <span class="n">training_spec</span> <span class="o">=</span> <span class="n">build_transition_model_and_training_spec_from_type</span><span class="p">(</span>
+            <span class="n">observation_spec</span><span class="o">=</span><span class="n">observation_spec</span><span class="p">,</span>
+            <span class="n">action_spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+            <span class="n">transition_model_type</span><span class="o">=</span><span class="n">transition_model_type</span><span class="p">,</span>
+            <span class="n">num_hidden_layers</span><span class="o">=</span><span class="n">num_hidden_layers_model</span><span class="p">,</span>
+            <span class="n">num_hidden_nodes</span><span class="o">=</span><span class="n">num_hidden_nodes_model</span><span class="p">,</span>
+            <span class="n">activation_function</span><span class="o">=</span><span class="n">activation_function_model</span><span class="p">,</span>
+            <span class="n">ensemble_size</span><span class="o">=</span><span class="n">ensemble_size</span><span class="p">,</span>
+            <span class="n">predict_state_difference</span><span class="o">=</span><span class="n">predict_state_difference</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+            <span class="n">training_batch_size</span><span class="o">=</span><span class="n">training_batch_size</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
+            <span class="n">trajectory_sampler</span><span class="o">=</span><span class="n">trajectory_sampler</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># model-free agent</span>
+        <span class="n">actor_net</span> <span class="o">=</span> <span class="n">ActorDistributionNetwork</span><span class="p">(</span>
+            <span class="n">input_tensor_spec</span><span class="o">=</span><span class="n">observation_spec</span><span class="p">,</span>
+            <span class="n">output_tensor_spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+            <span class="n">fc_layer_params</span><span class="o">=</span><span class="p">[</span><span class="n">num_hidden_nodes_agent</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_hidden_layers_agent</span><span class="p">,</span>
+            <span class="n">activation_fn</span><span class="o">=</span><span class="n">activation_function_agent</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">value_net</span> <span class="o">=</span> <span class="n">ValueNetwork</span><span class="p">(</span>
+            <span class="n">input_tensor_spec</span><span class="o">=</span><span class="n">observation_spec</span><span class="p">,</span>
+            <span class="n">fc_layer_params</span><span class="o">=</span><span class="p">[</span><span class="n">num_hidden_nodes_agent</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_hidden_layers_agent</span><span class="p">,</span>
+            <span class="n">activation_fn</span><span class="o">=</span><span class="n">activation_function_agent</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_free_agent_type</span> <span class="o">==</span> <span class="n">ModelFreeAgentType</span><span class="o">.</span><span class="n">Ppo</span><span class="p">:</span>
+            <span class="n">model_free_agent</span> <span class="o">=</span> <span class="n">PPOClipAgent</span><span class="p">(</span>  <span class="c1"># the one normally used for experiments...</span>
+                <span class="n">time_step_spec</span><span class="o">=</span><span class="n">time_step_spec</span><span class="p">,</span>
+                <span class="n">action_spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+                <span class="n">actor_net</span><span class="o">=</span><span class="n">actor_net</span><span class="p">,</span>
+                <span class="n">value_net</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+                <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(),</span>  <span class="c1"># default None does not work...</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">model_free_agent_type</span> <span class="o">==</span> <span class="n">ModelFreeAgentType</span><span class="o">.</span><span class="n">Trpo</span><span class="p">:</span>
+            <span class="n">model_free_agent</span> <span class="o">=</span> <span class="n">TRPOAgent</span><span class="p">(</span>
+                <span class="n">time_step_spec</span><span class="o">=</span><span class="n">time_step_spec</span><span class="p">,</span>
+                <span class="n">action_spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+                <span class="n">actor_net</span><span class="o">=</span><span class="n">actor_net</span><span class="p">,</span>
+                <span class="n">value_net</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unknown or unsupported agent type&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">transition_model</span><span class="p">,</span> <span class="n">training_spec</span><span class="p">),</span>
+            <span class="n">reward_model</span><span class="p">,</span>
+            <span class="n">initial_state_distribution_model</span><span class="p">,</span>
+            <span class="n">model_free_agent</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="p">,</span>
+            <span class="n">horizon</span><span class="p">,</span>
+            <span class="n">model_free_training_iterations</span><span class="p">,</span>
+            <span class="n">debug_summaries</span><span class="p">,</span>
+            <span class="n">train_step_counter</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

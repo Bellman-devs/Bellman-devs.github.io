@@ -1,0 +1,30 @@
+bellman.agents.mbpo
+===================
+
+.. automodule:: bellman.agents.mbpo
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.agents.mbpo.mbpo_agent
+

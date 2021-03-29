@@ -1,0 +1,34 @@
+bellman.agents.trpo.utils
+=========================
+
+.. automodule:: bellman.agents.trpo.utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      conjugate_gradient
+      flatten_tensors
+      hessian_vector_product
+      unflatten_tensor
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

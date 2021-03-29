@@ -1,0 +1,30 @@
+bellman.benchmark.trpo
+======================
+
+.. automodule:: bellman.benchmark.trpo
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.benchmark.trpo.train_eval
+

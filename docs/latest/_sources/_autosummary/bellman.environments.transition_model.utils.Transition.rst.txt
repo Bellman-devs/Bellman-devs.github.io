@@ -1,0 +1,35 @@
+bellman.environments.transition\_model.utils.Transition
+=======================================================
+
+.. currentmodule:: bellman.environments.transition_model.utils
+
+.. autoclass:: Transition
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Transition.count
+      ~Transition.index
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Transition.action
+      ~Transition.next_observation
+      ~Transition.observation
+      ~Transition.reward
+   
+   

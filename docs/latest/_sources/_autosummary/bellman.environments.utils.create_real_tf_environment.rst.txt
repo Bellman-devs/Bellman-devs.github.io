@@ -1,0 +1,6 @@
+bellman.environments.utils.create\_real\_tf\_environment
+========================================================
+
+.. currentmodule:: bellman.environments.utils
+
+.. autofunction:: create_real_tf_environment

@@ -1,0 +1,36 @@
+bellman.environments.transition\_model.keras\_model.keras.KerasTransitionModel
+==============================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.keras
+
+.. autoclass:: KerasTransitionModel
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~KerasTransitionModel.step
+      ~KerasTransitionModel.train
+      ~KerasTransitionModel.update_batch_size
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~KerasTransitionModel.action_space_spec
+      ~KerasTransitionModel.latent_observation_space_spec
+      ~KerasTransitionModel.observation_space_spec
+      ~KerasTransitionModel.predict_state_difference
+   
+   

@@ -1,0 +1,37 @@
+bellman.agents
+==============
+
+.. automodule:: bellman.agents
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.agents.background_planning
+   bellman.agents.components
+   bellman.agents.decision_time_planning
+   bellman.agents.mbpo
+   bellman.agents.mepo
+   bellman.agents.model_based_agent
+   bellman.agents.pets
+   bellman.agents.trpo
+

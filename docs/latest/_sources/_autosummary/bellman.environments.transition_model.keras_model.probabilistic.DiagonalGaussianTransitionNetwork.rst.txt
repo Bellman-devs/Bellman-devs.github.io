@@ -1,0 +1,29 @@
+bellman.environments.transition\_model.keras\_model.probabilistic.DiagonalGaussianTransitionNetwork
+===================================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.probabilistic
+
+.. autoclass:: DiagonalGaussianTransitionNetwork
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~DiagonalGaussianTransitionNetwork.build_model
+      ~DiagonalGaussianTransitionNetwork.gen_hidden_dense_layers
+      ~DiagonalGaussianTransitionNetwork.loss
+      ~DiagonalGaussianTransitionNetwork.metrics
+      ~DiagonalGaussianTransitionNetwork.transform_training_data
+   
+   
+
+   
+   
+   
