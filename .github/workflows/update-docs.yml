@@ -1,0 +1,42 @@
+on: [repository_dispatch]
+    
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Event Information
+      run: |
+        echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
+    - name: Clone develop branch of bellman and install all
+      if: github.event.action == 'PushOnDevelopBranch'
+      run: |
+        TMPDIR=$(mktemp)
+        wget -O $TMPDIR https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
+        sudo dpkg -i $TMPDIR
+        rm -f "$TMPDIR"
+        pip install --upgrade pip
+        pip install poetry
+        git clone --branch develop https://github.com/Bellman-devs/bellman.git
+        cd bellman
+        poetry install
+    - name: Generate docs and move them to latest
+      if: github.event.action == 'PushOnDevelopBranch'
+      run: |
+        cd bellman
+        poetry run task docsgen
+        rm -rf ../docs/latest && mkdir ../docs/latest
+        mv docs/_build/html/* ../docs/latest
+        cd .. && rm -rf bellman
+    - name: Commit changed docs to the repo
+      run: |
+        git add docs
+        git config --global user.email "none"
+        git config --global user.name "github-actions-bot"
+        git commit -m "update documentation"
+        git push -f origin master
+
+    - run: echo "Docs updated successfully"
