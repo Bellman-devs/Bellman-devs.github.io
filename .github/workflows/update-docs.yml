@@ -37,11 +37,10 @@ jobs:
         git clone --branch develop https://github.com/Bellman-devs/bellman.git
         cd bellman
         poetry install
-        ls -alh ..
     - name: Generate docs and move them to latest
       if: github.event.action == 'PushOnDevelopBranch'
       run: |
-        ls -alh .
+        cd bellman
         poetry run task docsgen
         rm -rf ../docs/latest && mkdir ../docs/latest
         mv docs/_build/html/* ../docs/latest
@@ -52,6 +51,6 @@ jobs:
         git config --global user.email "none"
         git config --global user.name "github-actions-bot"
         git commit -m "update documentation"
-        git push -f origin master
+        git push -f origin hstojic/update_docs_workflow
 
     - run: echo "Docs updated successfully"
