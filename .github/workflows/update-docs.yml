@@ -37,13 +37,11 @@ jobs:
         git clone --branch develop https://github.com/Bellman-devs/bellman.git
         cd bellman
         poetry install
-    - name: 
-      run: |
-        poetry run task docsgen
+        ls -alh ..
     - name: Generate docs and move them to latest
       if: github.event.action == 'PushOnDevelopBranch'
       run: |
-        ls -alh ..
+        ls -alh .
         poetry run task docsgen
         rm -rf ../docs/latest && mkdir ../docs/latest
         mv docs/_build/html/* ../docs/latest
