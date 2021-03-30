@@ -1,0 +1,6 @@
+bellman.agents.trpo.utils.conjugate\_gradient
+=============================================
+
+.. currentmodule:: bellman.agents.trpo.utils
+
+.. autofunction:: conjugate_gradient

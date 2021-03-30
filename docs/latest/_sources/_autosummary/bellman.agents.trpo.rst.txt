@@ -1,0 +1,31 @@
+bellman.agents.trpo
+===================
+
+.. automodule:: bellman.agents.trpo
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.agents.trpo.trpo_agent
+   bellman.agents.trpo.utils
+

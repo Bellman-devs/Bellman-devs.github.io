@@ -1,0 +1,6 @@
+bellman.environments.transition\_model.utils.size
+=================================================
+
+.. currentmodule:: bellman.environments.transition_model.utils
+
+.. autofunction:: size

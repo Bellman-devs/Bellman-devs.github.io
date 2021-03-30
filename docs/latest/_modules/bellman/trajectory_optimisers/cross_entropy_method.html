@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.trajectory_optimisers.cross_entropy_method &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/bellman.html">bellman</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bellman.trajectory_optimisers.cross_entropy_method</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bellman.trajectory_optimisers.cross_entropy_method</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Bellman Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines a method which can be used to optimise trajectories according to the cross</span>
+<span class="sd">entropy method as described in:</span>
+
+<span class="sd">Botev, Z.; Kroese, D.; Rubinstein, R.; L’Ecuyer, P. (2013)</span>
+<span class="sd">The Cross-Entropy Method for Optimization. In Handbook of Statistics, Vol: 31, Page: 35-59</span>
+
+<span class="sd">The helper function `cross_entropy_method_trajectory_optimisation` constructs a</span>
+<span class="sd">`TrajectoryOptimiser` object which has been configured to use the cross entropy method.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tf_agents.trajectories.time_step</span> <span class="kn">import</span> <span class="n">TimeStep</span>
+<span class="kn">from</span> <span class="nn">tf_agents.trajectories.trajectory</span> <span class="kn">import</span> <span class="n">Trajectory</span>
+<span class="kn">from</span> <span class="nn">tf_agents.typing</span> <span class="kn">import</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">tf_agents.typing.types</span> <span class="kn">import</span> <span class="n">NestedBoundedTensorSpec</span>
+
+<span class="kn">from</span> <span class="nn">bellman.policies.cross_entropy_method_policy</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CrossEntropyMethodPolicy</span><span class="p">,</span>
+    <span class="n">sample_action_batch</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bellman.trajectory_optimisers.particles</span> <span class="kn">import</span> <span class="n">averaged_particle_returns</span>
+<span class="kn">from</span> <span class="nn">bellman.trajectory_optimisers.trajectory_optimisers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PolicyStateUpdater</span><span class="p">,</span>
+    <span class="n">PolicyTrajectoryOptimiser</span><span class="p">,</span>
+    <span class="n">TrajectoryOptimiser</span><span class="p">,</span>
+    <span class="n">TrajectorySelector</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="cross_entropy_method_trajectory_optimisation"><a class="viewcode-back" href="../../../_autosummary/bellman.trajectory_optimisers.cross_entropy_method.cross_entropy_method_trajectory_optimisation.html#bellman.trajectory_optimisers.cross_entropy_method.cross_entropy_method_trajectory_optimisation">[docs]</a><span class="k">def</span> <span class="nf">cross_entropy_method_trajectory_optimisation</span><span class="p">(</span>
+    <span class="n">time_step_spec</span><span class="p">:</span> <span class="n">TimeStep</span><span class="p">,</span>
+    <span class="n">action_spec</span><span class="p">:</span> <span class="n">NestedBoundedTensorSpec</span><span class="p">,</span>
+    <span class="n">horizon</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">number_of_particles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_elites</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrajectoryOptimiser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to construct a trajectory optimiser which uses the cross entropy method.</span>
+
+<span class="sd">    :param time_step_spec: A `TimeStep` spec of the expected time_steps.</span>
+<span class="sd">    :param action_spec: A nest of BoundedTensorSpec representing the actions.</span>
+<span class="sd">    :param horizon: Number of steps taken in the environment in each virtual rollout.</span>
+<span class="sd">    :param population_size: The number of candidate sequences of actions at each iteration.</span>
+<span class="sd">    :param number_of_particles: Number of monte-carlo rollouts of each action trajectory.</span>
+<span class="sd">    :param num_elites: The number of elite trajectories used for updating the parameters</span>
+<span class="sd">        of distribution for each action. This should be a proportion of `population_size`</span>
+<span class="sd">        rollouts.</span>
+<span class="sd">    :param learning_rate: The learning rate for updating the distribution parameters.</span>
+<span class="sd">    :param max_iterations: The maximum number of iterations to use for optimisation.</span>
+
+<span class="sd">    :return: A `TrajectoryOptimiser` object which uses the cross entropy method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">policy</span> <span class="o">=</span> <span class="n">CrossEntropyMethodPolicy</span><span class="p">(</span><span class="n">time_step_spec</span><span class="p">,</span> <span class="n">action_spec</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">population_size</span><span class="p">)</span>
+    <span class="n">policy_state_updater</span> <span class="o">=</span> <span class="n">CrossEntropyMethodPolicyStateUpdater</span><span class="p">(</span>
+        <span class="n">num_elites</span><span class="o">=</span><span class="n">num_elites</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span>
+    <span class="p">)</span>
+    <span class="n">trajectory_selector</span> <span class="o">=</span> <span class="n">CrossEntropyMethodTrajectorySelector</span><span class="p">(</span><span class="n">action_spec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PolicyTrajectoryOptimiser</span><span class="p">(</span>
+        <span class="n">policy</span><span class="p">,</span>
+        <span class="n">horizon</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">,</span>
+        <span class="n">number_of_particles</span><span class="o">=</span><span class="n">number_of_particles</span><span class="p">,</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+        <span class="n">trajectory_selector</span><span class="o">=</span><span class="n">trajectory_selector</span><span class="p">,</span>
+        <span class="n">policy_state_updater</span><span class="o">=</span><span class="n">policy_state_updater</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CrossEntropyMethodTrajectorySelector"><a class="viewcode-back" href="../../../_autosummary/bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodTrajectorySelector.html#bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodTrajectorySelector">[docs]</a><span class="k">class</span> <span class="nc">CrossEntropyMethodTrajectorySelector</span><span class="p">(</span><span class="n">TrajectorySelector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use the mean of the distribution as the optimal trajectory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">add_candidate_trajectories</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">trajectories</span><span class="p">:</span> <span class="n">Trajectory</span><span class="p">,</span>
+        <span class="n">policy_state</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">NestedTensor</span><span class="p">,</span>
+        <span class="n">number_of_particles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_trajectory</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">policy_state</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="CrossEntropyMethodPolicyStateUpdater"><a class="viewcode-back" href="../../../_autosummary/bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodPolicyStateUpdater.html#bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodPolicyStateUpdater">[docs]</a><span class="k">class</span> <span class="nc">CrossEntropyMethodPolicyStateUpdater</span><span class="p">(</span><span class="n">PolicyStateUpdater</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This `PolicyStateUpdater` updates the policy state for the cross entropy method policy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_elites</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param num_elites: number of samples to use to update sampling distribution</span>
+<span class="sd">        :param learning_rate: in [0,1] determines how quickly to update sampling distribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">learning_rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Invalid learning rate&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_elites</span> <span class="o">=</span> <span class="n">num_elites</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">=</span> <span class="n">learning_rate</span>
+
+<div class="viewcode-block" id="CrossEntropyMethodPolicyStateUpdater.update"><a class="viewcode-back" href="../../../_autosummary/bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodPolicyStateUpdater.html#bellman.trajectory_optimisers.cross_entropy_method.CrossEntropyMethodPolicyStateUpdater.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">policy_state</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">NestedTensor</span><span class="p">,</span>
+        <span class="n">trajectories</span><span class="p">:</span> <span class="n">Trajectory</span><span class="p">,</span>
+        <span class="n">number_of_particles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">NestedTensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the policy state at the end of each iteration.</span>
+
+<span class="sd">        Note that the each of the trajectories in the batch should be of the same length.</span>
+<span class="sd">        Trajectories cannot terminate and restart.</span>
+
+<span class="sd">        :param policy_state: A nest of tensors with details about policy.</span>
+<span class="sd">        :param trajectories: A time-stacked trajectory object.</span>
+<span class="sd">        :param number_of_particles: Number of monte-carlo rollouts of each action trajectory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_elites</span> <span class="o">&lt;=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">discount</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">),</span> <span class="s2">&quot;num_elites needs to be smaller than population size&quot;</span>
+        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">reduce_all</span><span class="p">(</span><span class="n">trajectories</span><span class="o">.</span><span class="n">is_boundary</span><span class="p">()[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">False</span>
+        <span class="p">),</span> <span class="s2">&quot;No trajectories in the batch should contain a terminal state before the final step.&quot;</span>
+        <span class="k">assert</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">reduce_all</span><span class="p">(</span><span class="n">trajectories</span><span class="o">.</span><span class="n">is_boundary</span><span class="p">()[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">True</span>
+        <span class="p">),</span> <span class="s2">&quot;All trajectories in the batch must end in a terminal state.&quot;</span>
+
+        <span class="n">returns</span> <span class="o">=</span> <span class="n">averaged_particle_returns</span><span class="p">(</span>
+            <span class="n">trajectories</span><span class="o">.</span><span class="n">reward</span><span class="p">,</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">discount</span><span class="p">,</span> <span class="n">number_of_particles</span>
+        <span class="p">)</span>
+
+        <span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;DESCENDING&quot;</span><span class="p">)</span>
+        <span class="n">elite_idx</span> <span class="o">=</span> <span class="n">sorted_idx</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_elites</span><span class="p">]</span>
+        <span class="n">elites</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+            <span class="n">trajectories</span><span class="o">.</span><span class="n">action</span><span class="p">,</span> <span class="n">elite_idx</span>
+        <span class="p">)</span>  <span class="c1"># shape = (number of elites, horizon) + action_spec.shape</span>
+
+        <span class="n">elites_mean</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">elites</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># shape = (horizon,) + action_spec.shape</span>
+        <span class="n">elites_var</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">elites</span> <span class="o">-</span> <span class="n">elites_mean</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>  <span class="c1"># shape = (horizon,) + action_spec.shape</span>
+
+        <span class="n">old_mean</span><span class="p">,</span> <span class="n">old_var</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">step_index</span> <span class="o">=</span> <span class="n">policy_state</span>
+
+        <span class="n">new_mean</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">old_mean</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">*</span> <span class="n">elites_mean</span>  <span class="c1"># shape = (horizon,) + action_spec.shape</span>
+        <span class="n">new_var</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">old_var</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lr</span> <span class="o">*</span> <span class="n">elites_var</span>  <span class="c1"># shape = (horizon,) + action_spec.shape</span>
+
+        <span class="n">new_actions</span> <span class="o">=</span> <span class="n">sample_action_batch</span><span class="p">(</span><span class="n">new_mean</span><span class="p">,</span> <span class="n">new_var</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">nest</span><span class="o">.</span><span class="n">pack_sequence_as</span><span class="p">(</span>
+            <span class="n">policy_state</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">new_mean</span><span class="p">,</span> <span class="n">new_var</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">new_actions</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">step_index</span><span class="p">)],</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

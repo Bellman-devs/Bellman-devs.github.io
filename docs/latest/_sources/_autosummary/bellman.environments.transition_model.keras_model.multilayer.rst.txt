@@ -1,0 +1,32 @@
+bellman.environments.transition\_model.keras\_model.multilayer
+==============================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model.multilayer
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      MultilayerFcTransitionNetwork
+   
+   
+
+   
+   
+   
+
+
+

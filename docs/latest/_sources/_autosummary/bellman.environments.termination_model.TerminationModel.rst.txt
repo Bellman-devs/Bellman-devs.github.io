@@ -1,0 +1,25 @@
+bellman.environments.termination\_model.TerminationModel
+========================================================
+
+.. currentmodule:: bellman.environments.termination_model
+
+.. autoclass:: TerminationModel
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~TerminationModel.terminates
+   
+   
+
+   
+   
+   

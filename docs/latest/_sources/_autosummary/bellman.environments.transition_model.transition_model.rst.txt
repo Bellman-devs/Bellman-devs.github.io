@@ -1,0 +1,42 @@
+bellman.environments.transition\_model.transition\_model
+========================================================
+
+.. automodule:: bellman.environments.transition_model.transition_model
+
+   
+   
+   .. rubric:: Module attributes
+
+   .. autosummary::
+      :toctree:
+   
+      T
+      TS
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      TrainableTransitionModel
+      TransitionModel
+      TransitionModelTrainingSpec
+   
+   
+
+   
+   
+   
+
+
+

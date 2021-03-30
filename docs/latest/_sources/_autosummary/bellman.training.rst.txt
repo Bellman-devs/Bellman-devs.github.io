@@ -1,0 +1,35 @@
+bellman.training
+================
+
+.. automodule:: bellman.training
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.training.agent_trainer
+   bellman.training.background_planning_agent_trainer
+   bellman.training.decision_time_planning_agent_trainer
+   bellman.training.model_free_agent_trainer
+   bellman.training.schedule
+   bellman.training.utils
+

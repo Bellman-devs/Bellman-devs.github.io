@@ -1,0 +1,25 @@
+bellman.training.agent\_trainer.AgentTrainer
+============================================
+
+.. currentmodule:: bellman.training.agent_trainer
+
+.. autoclass:: AgentTrainer
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~AgentTrainer.create_training_scheduler
+   
+   
+
+   
+   
+   

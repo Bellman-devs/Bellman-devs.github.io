@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.benchmark.pets.train_eval.train_eval &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="bellman.benchmark.trpo" href="bellman.benchmark.trpo.html" />
+    <link rel="prev" title="bellman.benchmark.pets.train_eval" href="bellman.benchmark.pets.train_eval.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="bellman.html">bellman</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bellman.agents.html">bellman.agents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="bellman.benchmark.html">bellman.benchmark</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="bellman.benchmark.mepo.html">bellman.benchmark.mepo</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="bellman.benchmark.pets.html">bellman.benchmark.pets</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bellman.benchmark.pets.train_eval.html">bellman.benchmark.pets.train_eval</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bellman.benchmark.trpo.html">bellman.benchmark.trpo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.distributions.html">bellman.distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.drivers.html">bellman.drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.environments.html">bellman.environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.harness.html">bellman.harness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.networks.html">bellman.networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.policies.html">bellman.policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.training.html">bellman.training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.trajectory_optimisers.html">bellman.trajectory_optimisers</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="bellman.html">bellman</a> &raquo;</li>
+        
+          <li><a href="bellman.benchmark.html">bellman.benchmark</a> &raquo;</li>
+        
+          <li><a href="bellman.benchmark.pets.html">bellman.benchmark.pets</a> &raquo;</li>
+        
+          <li><a href="bellman.benchmark.pets.train_eval.html">bellman.benchmark.pets.train_eval</a> &raquo;</li>
+        
+      <li>bellman.benchmark.pets.train_eval.train_eval</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="bellman-benchmark-pets-train-eval-train-eval">
+<h1>bellman.benchmark.pets.train_eval.train_eval<a class="headerlink" href="#bellman-benchmark-pets-train-eval-train-eval" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="bellman.benchmark.pets.train_eval.train_eval">
+<code class="sig-prename descclassname"><span class="pre">bellman.benchmark.pets.train_eval.</span></code><code class="sig-name descname"><span class="pre">train_eval</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_environment_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_eval_episodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gym_random_seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward_model_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_distribution_model_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_model_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_hidden_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_hidden_nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_state_difference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_sampler_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_optimization_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_particles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_elites</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps_per_transition_model_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_buffer_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_initial_random_policy_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_tf_function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/benchmark/pets/train_eval.html#train_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.benchmark.pets.train_eval.train_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will train and evaluate a PETS agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root_dir</strong> – Root directory where all experiments are stored.</p></li>
+<li><p><strong>num_environment_steps</strong> – The number of environment steps to run the
+experiment for.</p></li>
+<li><p><strong>num_eval_episodes</strong> – Number of episodes at each evaluation point.</p></li>
+<li><p><strong>eval_interval</strong> – Interval for evaluation points.</p></li>
+<li><p><strong>summary_interval</strong> – Interval for summaries.</p></li>
+<li><p><strong>env_name</strong> – Name for the environment to load.</p></li>
+<li><p><strong>gym_random_seed</strong> – Value to use as seed for the environment.</p></li>
+<li><p><strong>reward_model_class</strong> – A component of the environment model that describes the
+rewards. At the moment only pre-specified reward models are allowed, i.e. agent
+assumes reward function is known.</p></li>
+<li><p><strong>initial_state_distribution_model_class</strong> – A component of the environment model that
+describes the initial state distribution (can be both deterministic or
+probabilistic). At the moment only pre-specified initial state distribution models
+are allowed, i.e. agent assumes initial state distribution is known.</p></li>
+<li><p><strong>random_seed</strong> – A component of the environment model that describes the
+rewards. At the moment only pre-specified reward models are allowed, i.e. agent
+assumes reward function is known.</p></li>
+<li><p><strong>transition_model_type</strong> – An indicator which of the available transition models
+should be used - list can be found in <cite>TransitionModelType</cite>. A component of the
+environment model that describes the transition dynamics.</p></li>
+<li><p><strong>num_hidden_layers</strong> – A transition model parameter, used for constructing a neural
+network. A number of hidden layers in the neural network.</p></li>
+<li><p><strong>num_hidden_nodes</strong> – A transition model parameter, used for constructing a neural
+network. A number of nodes in each hidden layer. Parameter is shared across all layers.</p></li>
+<li><p><strong>activation_function</strong> – A transition model parameter, used for constructing a
+neural network. An activation function of the hidden nodes.</p></li>
+<li><p><strong>ensemble_size</strong> – A transition model parameter, used for constructing a neural
+network. The number of networks in the ensemble.</p></li>
+<li><p><strong>predict_state_difference</strong> – A transition model parameter, used for constructing a
+neural network. A boolean indicating whether transition model will be predicting a
+difference between current and a next state or the next state directly.</p></li>
+<li><p><strong>epochs</strong> – A transition model parameter, used by Keras fit method. A number of epochs
+used for training the neural network.</p></li>
+<li><p><strong>training_batch_size</strong> – A transition model parameter, used by Keras fit method. A
+batch size used for training the neural network.</p></li>
+<li><p><strong>trajectory_sampler_type</strong> – An indicator which of the available trajectory samplers
+should be used - list can be found in <cite>TrajectorySamplerType</cite>. Trajectory sampler
+determines how predictions from an ensemble of neural networks that model the
+transition dynamics are sampled. Works only with ensemble type of transition models.</p></li>
+<li><p><strong>trajectory_optimization_type</strong> – An indicator which of the available trajectory
+optimisers should be used - list can be found in <cite>TrajectoryOptimizationType</cite>.
+Trajectory optimiser optimises a sequence of actions over a given horizon and an
+environment model.</p></li>
+<li><p><strong>horizon</strong> – A trajectory optimiser parameter. The number of steps taken in the
+environment in each virtual rollout.</p></li>
+<li><p><strong>population_size</strong> – A trajectory optimiser parameter. The number of virtual rollouts
+that are simulated in each iteration during trajectory optimization.</p></li>
+<li><p><strong>number_of_particles</strong> – A trajectory optimiser parameter. The number of monte-carlo
+rollouts of each action trajectory.</p></li>
+<li><p><strong>num_elites</strong> – A trajectory optimiser parameter, required only for the Cross entropy
+method. The number of elite trajectories used for updating the parameters of
+distribution for each action. This should be a proportion of <cite>population_size</cite>
+rollouts.</p></li>
+<li><p><strong>learning_rate</strong> – A trajectory optimiser parameter, required only for the Cross
+entropy method. The learning rate for updating the distribution parameters.</p></li>
+<li><p><strong>max_iterations</strong> – A trajectory optimiser parameter, required only for the Cross
+entropy method. The maximum number of iterations to use for optimisation.</p></li>
+<li><p><strong>steps_per_transition_model_update</strong> – steps between transition model updates.</p></li>
+<li><p><strong>replay_buffer_capacity</strong> – Capacity of the buffer collecting real samples.</p></li>
+<li><p><strong>number_of_initial_random_policy_steps</strong> – If &gt; 0, some initial training data is
+gathered by running a random policy on the real environment.</p></li>
+<li><p><strong>use_tf_function</strong> – If <cite>True</cite>, use a <cite>tf.function</cite> for data collection.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="bellman.benchmark.trpo.html" class="btn btn-neutral float-right" title="bellman.benchmark.trpo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="bellman.benchmark.pets.train_eval.html" class="btn btn-neutral float-left" title="bellman.benchmark.pets.train_eval" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

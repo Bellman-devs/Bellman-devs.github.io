@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.harness.harness.ExperimentHarness &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="bellman.harness.utils" href="bellman.harness.utils.html" />
+    <link rel="prev" title="bellman.harness.harness" href="bellman.harness.harness.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="bellman.html">bellman</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bellman.agents.html">bellman.agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.benchmark.html">bellman.benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.distributions.html">bellman.distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.drivers.html">bellman.drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.environments.html">bellman.environments</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="bellman.harness.html">bellman.harness</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bellman.harness.harness.html">bellman.harness.harness</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">bellman.harness.harness.ExperimentHarness</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bellman.harness.utils.html">bellman.harness.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.networks.html">bellman.networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.policies.html">bellman.policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.training.html">bellman.training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bellman.trajectory_optimisers.html">bellman.trajectory_optimisers</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="bellman.html">bellman</a> &raquo;</li>
+        
+          <li><a href="bellman.harness.html">bellman.harness</a> &raquo;</li>
+        
+          <li><a href="bellman.harness.harness.html">bellman.harness.harness</a> &raquo;</li>
+        
+      <li>bellman.harness.harness.ExperimentHarness</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="bellman-harness-harness-experimentharness">
+<h1>bellman.harness.harness.ExperimentHarness<a class="headerlink" href="#bellman-harness-harness-experimentharness" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="bellman.harness.harness.ExperimentHarness">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">bellman.harness.harness.</span></code><code class="sig-name descname"><span class="pre">ExperimentHarness</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_trainer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_replay_buffer_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_number_of_environment_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_evaluation_episodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_initial_random_policy_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_tf_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A harness for running experiments. The <cite>run</cite> method will run the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Root directory where all experiments are stored.</p></li>
+<li><p><strong>environment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TFEnvironment</span></code>) – The training environment the agent is stepping through.</p></li>
+<li><p><strong>evaluation_environment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TFEnvironment</span></code>) – The environment for evaluating the performance of the agent.</p></li>
+<li><p><strong>agent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TFAgent</span></code>) – The TF-Agent agent to train.</p></li>
+<li><p><strong>agent_trainer</strong> (<a class="reference internal" href="bellman.training.agent_trainer.AgentTrainer.html#bellman.training.agent_trainer.AgentTrainer" title="bellman.training.agent_trainer.AgentTrainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgentTrainer</span></code></a>) – The trainer which will produce a training schedule for the components
+of the agent.</p></li>
+<li><p><strong>real_replay_buffer_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Capacity of the buffer collecting real samples.</p></li>
+<li><p><strong>total_number_of_environment_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of environment steps to run the
+experiment for.</p></li>
+<li><p><strong>summary_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Interval for summaries.</p></li>
+<li><p><strong>evaluation_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Interval for evaluation points.</p></li>
+<li><p><strong>number_of_evaluation_episodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of episodes at each evaluation point.</p></li>
+<li><p><strong>number_of_initial_random_policy_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – If &gt; 0, some initial training data is
+gathered by running a random policy on the real environment.</p></li>
+<li><p><strong>use_tf_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If <cite>True</cite>, use a <cite>tf.function</cite> for data collection.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.create_evaluation_metrics" title="bellman.harness.harness.ExperimentHarness.create_evaluation_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_evaluation_metrics</span></code></a></p></td>
+<td><p>Create a list of metrics to capture during policy evaluation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.create_real_drivers" title="bellman.harness.harness.ExperimentHarness.create_real_drivers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_real_drivers</span></code></a></p></td>
+<td><p>Create the drivers for interacting with the real environment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.create_real_replay_buffer" title="bellman.harness.harness.ExperimentHarness.create_real_replay_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_real_replay_buffer</span></code></a></p></td>
+<td><p>Create the replay buffer for storing data from the real environment.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.create_summary_writers" title="bellman.harness.harness.ExperimentHarness.create_summary_writers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_summary_writers</span></code></a></p></td>
+<td><p>Create and return the training time summary writer and the evaluation time summary writer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.create_train_metrics" title="bellman.harness.harness.ExperimentHarness.create_train_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_train_metrics</span></code></a></p></td>
+<td><p>Create a list of metrics to capture during training.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.define_base_experiment_directory" title="bellman.harness.harness.ExperimentHarness.define_base_experiment_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_base_experiment_directory</span></code></a></p></td>
+<td><p>Define the path for the base directory for the experiment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.define_tensorboard_directories" title="bellman.harness.harness.ExperimentHarness.define_tensorboard_directories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_tensorboard_directories</span></code></a></p></td>
+<td><p>Define the paths of the tensorboard directories.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.run" title="bellman.harness.harness.ExperimentHarness.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a></p></td>
+<td><p>This method runs an experiment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.serialise_config" title="bellman.harness.harness.ExperimentHarness.serialise_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serialise_config</span></code></a></p></td>
+<td><p>This method creates a single gin config file in the <cite>base_dir</cite>. This file can be used to reproduce the experiment. This “operative” config file will contain all of the parameters which have been used to parameterise a function decorated with <a href="#id1"><span class="problematic" id="id2">`</span></a>&#64;gin.configurable’.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.write_summary_scalar" title="bellman.harness.harness.ExperimentHarness.write_summary_scalar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_summary_scalar</span></code></a></p></td>
+<td><p>Write a scalar summary statistic to a tensorboard directory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.agent" title="bellman.harness.harness.ExperimentHarness.agent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">agent</span></code></a></p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TFAgent</span></code></p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bellman.harness.harness.ExperimentHarness.base_dirname" title="bellman.harness.harness.ExperimentHarness.base_dirname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_dirname</span></code></a></p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.agent">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">agent</span></code><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.agent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TFAgent</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The agent which is trained by this harness.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.base_dirname">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">base_dirname</span></code><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.base_dirname" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The directory name in the root directory where results will be stored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.create_evaluation_metrics">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">create_evaluation_metrics</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.create_evaluation_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.create_evaluation_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of metrics to capture during policy evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TFStepMetric</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.create_real_drivers">
+<code class="sig-name descname"><span class="pre">create_real_drivers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real_replay_buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.create_real_drivers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.create_real_drivers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the drivers for interacting with the real environment.</p>
+<p>This method creates two drivers: one uses the agent’s “collect” policy, the other uses a
+uniform random policy.</p>
+<p>Note that the random policy is defined with the same <cite>info_spec</cite> as the agent’s “collect”
+policy. The <cite>info_spec</cite> of the trajectories generated by the random policy must conform to
+the expectations of the agent when the data is used for training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Driver</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Driver</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.create_real_replay_buffer">
+<code class="sig-name descname"><span class="pre">create_real_replay_buffer</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.create_real_replay_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.create_real_replay_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the replay buffer for storing data from the real environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ReplayBuffer</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.create_summary_writers">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">create_summary_writers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.create_summary_writers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.create_summary_writers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return the training time summary writer and the evaluation time summary writer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">SummaryWriter</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SummaryWriter</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.create_train_metrics">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">create_train_metrics</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.create_train_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.create_train_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of metrics to capture during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TFStepMetric</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.define_base_experiment_directory">
+<code class="sig-name descname"><span class="pre">define_base_experiment_directory</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.define_base_experiment_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.define_base_experiment_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the path for the base directory for the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.define_tensorboard_directories">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">define_tensorboard_directories</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.define_tensorboard_directories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.define_tensorboard_directories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the paths of the tensorboard directories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method runs an experiment. It creates a loop that steps through the environment,
+using the agent to collect actions in each step. Note that loop only seemingly goes
+step-by-step, drivers actually collect multiple steps in each call, governed by the number
+of initial random policy steps and maximum number of steps - the greatest common divisor of
+all the trainable components’ training intervals, obtained through the
+<cite>TFTrainingScheduler</cite> method <cite>environment_steps_between_maybe_train</cite>.</p>
+<p>While running, this will collect metrics (during training and also separate evaluation
+metrics). These metrics are periodically logged to <cite>stdout</cite>, and also recorded by summary
+writers. Note that <cite>max_steps</cite> takes into account various reporting intervals computing a
+greatest common denominator among all intervals to determine the step size. Hence, it
+would be good to use intervals that are multiples of each other, if possible.</p>
+<p>Note that this method also creates an environment step counter metric, which is used
+throughout to monitor the progress of the experiment. This counter ensures that periodic
+tasks, such as logging and training, happen at the correct intervals.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.serialise_config">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">serialise_config</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.serialise_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.serialise_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method creates a single gin config file in the <cite>base_dir</cite>. This file can be used to
+reproduce the experiment. This “operative” config file will contain all of the parameters
+which have been used to parameterise a function decorated with <a href="#id3"><span class="problematic" id="id4">`</span></a>&#64;gin.configurable’.</p>
+<p>The config parameter values are also written to a TensorBoard events file in the
+<cite>base_dir</cite>. This ensures that the parameter values can be viewed in TensorBoard.</p>
+<p>Note: The <cite>GinConfigSaverHook</cite> can create a TensorBoard events file. Unfortunately it does
+not seem to work with TensorFlow 2.0, so this is done manually.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="bellman.harness.harness.ExperimentHarness.write_summary_scalar">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">write_summary_scalar</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bellman/harness/harness.html#ExperimentHarness.write_summary_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bellman.harness.harness.ExperimentHarness.write_summary_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a scalar summary statistic to a tensorboard directory.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="bellman.harness.utils.html" class="btn btn-neutral float-right" title="bellman.harness.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="bellman.harness.harness.html" class="btn btn-neutral float-left" title="bellman.harness.harness" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

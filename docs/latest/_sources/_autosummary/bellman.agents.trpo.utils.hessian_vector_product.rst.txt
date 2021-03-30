@@ -1,0 +1,6 @@
+bellman.agents.trpo.utils.hessian\_vector\_product
+==================================================
+
+.. currentmodule:: bellman.agents.trpo.utils
+
+.. autofunction:: hessian_vector_product

@@ -1,0 +1,58 @@
+bellman.agents.pets.pets\_agent.PetsAgent
+=========================================
+
+.. currentmodule:: bellman.agents.pets.pets_agent
+
+.. autoclass:: PetsAgent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~PetsAgent.initialize
+      ~PetsAgent.loss
+      ~PetsAgent.preprocess_sequence
+      ~PetsAgent.train
+      ~PetsAgent.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PetsAgent.action_spec
+      ~PetsAgent.collect_data_context
+      ~PetsAgent.collect_data_spec
+      ~PetsAgent.collect_policy
+      ~PetsAgent.data_context
+      ~PetsAgent.debug_summaries
+      ~PetsAgent.initial_state_distribution_model
+      ~PetsAgent.name
+      ~PetsAgent.name_scope
+      ~PetsAgent.policy
+      ~PetsAgent.reward_model
+      ~PetsAgent.submodules
+      ~PetsAgent.summaries_enabled
+      ~PetsAgent.summarize_grads_and_vars
+      ~PetsAgent.termination_model
+      ~PetsAgent.time_step_spec
+      ~PetsAgent.train_argspec
+      ~PetsAgent.train_sequence_length
+      ~PetsAgent.train_step_counter
+      ~PetsAgent.trainable_variables
+      ~PetsAgent.training_data_spec
+      ~PetsAgent.transition_model
+      ~PetsAgent.validate_args
+      ~PetsAgent.variables
+   
+   

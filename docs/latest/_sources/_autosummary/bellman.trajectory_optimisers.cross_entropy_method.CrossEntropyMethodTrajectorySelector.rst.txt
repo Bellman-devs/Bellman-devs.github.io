@@ -1,0 +1,27 @@
+bellman.trajectory\_optimisers.cross\_entropy\_method.CrossEntropyMethodTrajectorySelector
+==========================================================================================
+
+.. currentmodule:: bellman.trajectory_optimisers.cross_entropy_method
+
+.. autoclass:: CrossEntropyMethodTrajectorySelector
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~CrossEntropyMethodTrajectorySelector.add_candidate_trajectories
+      ~CrossEntropyMethodTrajectorySelector.get_optimal_actions
+      ~CrossEntropyMethodTrajectorySelector.reset
+   
+   
+
+   
+   
+   

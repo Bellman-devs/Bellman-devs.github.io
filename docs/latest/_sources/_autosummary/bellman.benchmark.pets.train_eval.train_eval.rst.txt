@@ -1,0 +1,6 @@
+bellman.benchmark.pets.train\_eval.train\_eval
+==============================================
+
+.. currentmodule:: bellman.benchmark.pets.train_eval
+
+.. autofunction:: train_eval

@@ -1,0 +1,6 @@
+bellman.policies.cross\_entropy\_method\_policy.sample\_action\_batch
+=====================================================================
+
+.. currentmodule:: bellman.policies.cross_entropy_method_policy
+
+.. autofunction:: sample_action_batch

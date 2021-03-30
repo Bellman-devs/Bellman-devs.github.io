@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>bellman.environments.transition_model.transition_model &mdash; Bellman 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/color_theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Bellman
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Jupyter Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/approximate_mdps.html">Approximating MDPs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/model_visualisation.html">Learning from samples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/trajectory_optimisation.html">Trajectory Optimisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/bellman.html">bellman</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Bellman</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bellman.environments.transition_model.transition_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bellman.environments.transition_model.transition_model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Bellman Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines a base class for transition models.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tf_agents.specs</span> <span class="kn">import</span> <span class="n">BoundedTensorSpec</span>
+<span class="kn">from</span> <span class="nn">tf_agents.trajectories.trajectory</span> <span class="kn">import</span> <span class="n">Trajectory</span>
+<span class="kn">from</span> <span class="nn">tf_agents.utils.nest_utils</span> <span class="kn">import</span> <span class="n">is_batched_nested_tensors</span>
+
+<span class="kn">from</span> <span class="nn">bellman.environments.transition_model.observation_transformation</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IdentityObservationTransformation</span><span class="p">,</span>
+    <span class="n">ObservationTransformation</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TransitionModelTrainingSpec"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TransitionModelTrainingSpec.html#bellman.environments.transition_model.transition_model.TransitionModelTrainingSpec">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TransitionModelTrainingSpec</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specification data class for model training. Models that require additional parameters for</span>
+<span class="sd">    training should create a subclass of this class and add additional properties.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">training_batch_size</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+<div class="viewcode-block" id="TransitionModel"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TransitionModel.html#bellman.environments.transition_model.transition_model.TransitionModel">[docs]</a><span class="k">class</span> <span class="nc">TransitionModel</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for transition models.</span>
+
+<span class="sd">    A transition model forms part of a model of a Markov decision process (MDP).</span>
+
+<span class="sd">    Denote the state of the MDP by 𝒔 ∊ ℝⁿ, and the action by 𝒂 ∊ ℝᵐ. Then this transition model</span>
+<span class="sd">    should define the (probabilistic) function 𝒇 : ℝⁿ⁺ᵐ ↦ ℝⁿ, such that 𝒔ₜ₊₁ = 𝒇 (𝒔ₜ, 𝒂ₜ).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">observation_space_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoundedTensorSpec</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: The state space specification from the environment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">action_space_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoundedTensorSpec</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: The action space specification from the environment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TransitionModel.step"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TransitionModel.html#bellman.environments.transition_model.transition_model.TransitionModel.step">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the sampled next state of the MDP, given a state and an action.</span>
+
+<span class="sd">        :param observation: The current state.</span>
+<span class="sd">        :param action: The current chosen action.</span>
+<span class="sd">        :return: The sampled next state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; :var T: Return type from the `train` method of the `TrainableTransitionModel`. &quot;&quot;&quot;</span>
+<span class="n">TS</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;TS&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">TransitionModelTrainingSpec</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; :var TS: Specification of the model training for the `TrainableTransitionModel`. &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="TrainableTransitionModel"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TrainableTransitionModel.html#bellman.environments.transition_model.transition_model.TrainableTransitionModel">[docs]</a><span class="k">class</span> <span class="nc">TrainableTransitionModel</span><span class="p">(</span><span class="n">TransitionModel</span><span class="p">,</span> <span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">TS</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for transition models. This implementation of the `TransitionModel`</span>
+<span class="sd">    interface adds the abstract `train` method and validates the shapes and dtype of the input</span>
+<span class="sd">    tensors.</span>
+
+<span class="sd">    Subclasses of this class should define the `_step` method to sample the next state (or next</span>
+<span class="sd">    batch of states) from the current state and action (or current batch of states and actions),</span>
+<span class="sd">    and should also define the `train` method. Note that both the `_step` and the `_train` methods</span>
+<span class="sd">    need to internally take care of transforming observations back and forth between observed and</span>
+<span class="sd">    latent spaces (if transition models operate on a latent observation space different from the</span>
+<span class="sd">    environment observation space).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">observation_space_spec</span><span class="p">:</span> <span class="n">BoundedTensorSpec</span><span class="p">,</span>
+        <span class="n">action_space_spec</span><span class="p">:</span> <span class="n">BoundedTensorSpec</span><span class="p">,</span>
+        <span class="n">predict_state_difference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">observation_transformation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ObservationTransformation</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param observation_space_spec: The observation spec from the environment.</span>
+<span class="sd">        :param action_space_spec: The action spec from the environment.</span>
+<span class="sd">        :param predict_state_difference: Boolean to specify whether the transition model should</span>
+<span class="sd">            return the next (latent) state or the difference between the current (latent) state and</span>
+<span class="sd">            the next (latent) state</span>
+<span class="sd">        :param observation_transformation: To transform observations to latent observations that</span>
+<span class="sd">            are used by the transition model, and back. None will internally create an identity</span>
+<span class="sd">            transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observation_space_spec</span> <span class="o">=</span> <span class="n">observation_space_spec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_action_space_spec</span> <span class="o">=</span> <span class="n">action_space_spec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_predict_state_difference</span> <span class="o">=</span> <span class="n">predict_state_difference</span>
+
+        <span class="k">if</span> <span class="n">observation_transformation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span> <span class="o">=</span> <span class="n">IdentityObservationTransformation</span><span class="p">(</span>
+                <span class="n">observation_space_spec</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span> <span class="o">=</span> <span class="n">observation_transformation</span>  <span class="c1"># type: ignore</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">observation_space_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoundedTensorSpec</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observation_space_spec</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">latent_observation_space_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoundedTensorSpec</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: The latent state space specification from the transition model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span><span class="o">.</span><span class="n">latent_observation_space_spec</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">action_space_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BoundedTensorSpec</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_space_spec</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">predict_state_difference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: The predict state difference flag from the transition model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict_state_difference</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latent_observation</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TrainableTransitionModel.step"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TrainableTransitionModel.html#bellman.environments.transition_model.transition_model.TrainableTransitionModel.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        From an observation and an action, return the sampled next observation.</span>
+<span class="sd">        Both input tensors should have the same (non-zero) batch dimension.</span>
+
+<span class="sd">        :return: next observation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tensors</span> <span class="o">=</span> <span class="p">[</span><span class="n">observation</span><span class="p">,</span> <span class="n">action</span><span class="p">]</span>
+        <span class="n">specs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_space_spec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_space_spec</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="n">is_batched_nested_tensors</span><span class="p">(</span><span class="n">tensors</span><span class="p">,</span> <span class="n">specs</span><span class="p">,</span> <span class="n">num_outer_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">observation</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> should have equal batch sizes.&quot;</span>
+
+        <span class="n">latent_observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span><span class="o">.</span><span class="n">forward_observation</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+        <span class="n">next_latent_observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">(</span><span class="n">latent_observation</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict_state_difference</span><span class="p">:</span>
+            <span class="n">next_latent_observation</span> <span class="o">+=</span> <span class="n">latent_observation</span>
+
+        <span class="n">next_observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span><span class="o">.</span><span class="n">invert_observation</span><span class="p">(</span>
+            <span class="n">next_latent_observation</span><span class="p">,</span> <span class="n">observation</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">is_batched_nested_tensors</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">next_observation</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_observation_space_spec</span><span class="p">],</span> <span class="n">num_outer_dims</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">next_observation</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latent_trajectories</span><span class="p">:</span> <span class="n">Trajectory</span><span class="p">,</span> <span class="n">training_spec</span><span class="p">:</span> <span class="n">TS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TrainableTransitionModel.train"><a class="viewcode-back" href="../../../../_autosummary/bellman.environments.transition_model.transition_model.TrainableTransitionModel.html#bellman.environments.transition_model.transition_model.TrainableTransitionModel.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectories</span><span class="p">:</span> <span class="n">Trajectory</span><span class="p">,</span> <span class="n">training_spec</span><span class="p">:</span> <span class="n">TS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the transition model using data from the `Trajectory`, according to the specification</span>
+<span class="sd">        `training_spec`.</span>
+
+<span class="sd">        :param trajectories: The training data.</span>
+<span class="sd">        :param training_spec: The training specification.</span>
+<span class="sd">        :return: A summary of the training process, for example the model loss over the training</span>
+<span class="sd">            data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">latent_observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_transformation</span><span class="o">.</span><span class="n">forward_observation</span><span class="p">(</span>
+            <span class="n">trajectories</span><span class="o">.</span><span class="n">observation</span>
+        <span class="p">)</span>
+        <span class="n">latent_trajectories</span> <span class="o">=</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">observation</span><span class="o">=</span><span class="n">latent_observation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train</span><span class="p">(</span><span class="n">latent_trajectories</span><span class="p">,</span> <span class="n">training_spec</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, The Bellman Contributors.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

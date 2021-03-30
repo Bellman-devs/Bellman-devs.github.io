@@ -1,0 +1,58 @@
+bellman.agents.background\_planning.background\_planning\_agent.OffPolicyBackgroundPlanningAgent
+================================================================================================
+
+.. currentmodule:: bellman.agents.background_planning.background_planning_agent
+
+.. autoclass:: OffPolicyBackgroundPlanningAgent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~OffPolicyBackgroundPlanningAgent.initialize
+      ~OffPolicyBackgroundPlanningAgent.loss
+      ~OffPolicyBackgroundPlanningAgent.preprocess_sequence
+      ~OffPolicyBackgroundPlanningAgent.train
+      ~OffPolicyBackgroundPlanningAgent.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~OffPolicyBackgroundPlanningAgent.action_spec
+      ~OffPolicyBackgroundPlanningAgent.collect_data_context
+      ~OffPolicyBackgroundPlanningAgent.collect_data_spec
+      ~OffPolicyBackgroundPlanningAgent.collect_policy
+      ~OffPolicyBackgroundPlanningAgent.data_context
+      ~OffPolicyBackgroundPlanningAgent.debug_summaries
+      ~OffPolicyBackgroundPlanningAgent.initial_state_distribution_model
+      ~OffPolicyBackgroundPlanningAgent.name
+      ~OffPolicyBackgroundPlanningAgent.name_scope
+      ~OffPolicyBackgroundPlanningAgent.policy
+      ~OffPolicyBackgroundPlanningAgent.reward_model
+      ~OffPolicyBackgroundPlanningAgent.submodules
+      ~OffPolicyBackgroundPlanningAgent.summaries_enabled
+      ~OffPolicyBackgroundPlanningAgent.summarize_grads_and_vars
+      ~OffPolicyBackgroundPlanningAgent.termination_model
+      ~OffPolicyBackgroundPlanningAgent.time_step_spec
+      ~OffPolicyBackgroundPlanningAgent.train_argspec
+      ~OffPolicyBackgroundPlanningAgent.train_sequence_length
+      ~OffPolicyBackgroundPlanningAgent.train_step_counter
+      ~OffPolicyBackgroundPlanningAgent.trainable_variables
+      ~OffPolicyBackgroundPlanningAgent.training_data_spec
+      ~OffPolicyBackgroundPlanningAgent.transition_model
+      ~OffPolicyBackgroundPlanningAgent.validate_args
+      ~OffPolicyBackgroundPlanningAgent.variables
+   
+   

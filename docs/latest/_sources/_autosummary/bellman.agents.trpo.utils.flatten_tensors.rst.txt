@@ -1,0 +1,6 @@
+bellman.agents.trpo.utils.flatten\_tensors
+==========================================
+
+.. currentmodule:: bellman.agents.trpo.utils
+
+.. autofunction:: flatten_tensors

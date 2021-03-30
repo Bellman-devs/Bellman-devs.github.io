@@ -1,0 +1,31 @@
+bellman.policies
+================
+
+.. automodule:: bellman.policies
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.policies.cross_entropy_method_policy
+   bellman.policies.planning_policy
+

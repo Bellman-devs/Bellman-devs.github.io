@@ -1,0 +1,6 @@
+bellman.environments.transition\_model.keras\_model.factory\_methods.build\_trajectory\_sampler\_from\_type
+===========================================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.factory_methods
+
+.. autofunction:: build_trajectory_sampler_from_type

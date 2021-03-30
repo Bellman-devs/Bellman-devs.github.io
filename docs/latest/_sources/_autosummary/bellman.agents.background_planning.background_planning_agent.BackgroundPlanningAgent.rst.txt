@@ -1,0 +1,58 @@
+bellman.agents.background\_planning.background\_planning\_agent.BackgroundPlanningAgent
+=======================================================================================
+
+.. currentmodule:: bellman.agents.background_planning.background_planning_agent
+
+.. autoclass:: BackgroundPlanningAgent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~BackgroundPlanningAgent.initialize
+      ~BackgroundPlanningAgent.loss
+      ~BackgroundPlanningAgent.preprocess_sequence
+      ~BackgroundPlanningAgent.train
+      ~BackgroundPlanningAgent.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BackgroundPlanningAgent.action_spec
+      ~BackgroundPlanningAgent.collect_data_context
+      ~BackgroundPlanningAgent.collect_data_spec
+      ~BackgroundPlanningAgent.collect_policy
+      ~BackgroundPlanningAgent.data_context
+      ~BackgroundPlanningAgent.debug_summaries
+      ~BackgroundPlanningAgent.initial_state_distribution_model
+      ~BackgroundPlanningAgent.name
+      ~BackgroundPlanningAgent.name_scope
+      ~BackgroundPlanningAgent.policy
+      ~BackgroundPlanningAgent.reward_model
+      ~BackgroundPlanningAgent.submodules
+      ~BackgroundPlanningAgent.summaries_enabled
+      ~BackgroundPlanningAgent.summarize_grads_and_vars
+      ~BackgroundPlanningAgent.termination_model
+      ~BackgroundPlanningAgent.time_step_spec
+      ~BackgroundPlanningAgent.train_argspec
+      ~BackgroundPlanningAgent.train_sequence_length
+      ~BackgroundPlanningAgent.train_step_counter
+      ~BackgroundPlanningAgent.trainable_variables
+      ~BackgroundPlanningAgent.training_data_spec
+      ~BackgroundPlanningAgent.transition_model
+      ~BackgroundPlanningAgent.validate_args
+      ~BackgroundPlanningAgent.variables
+   
+   

@@ -1,0 +1,58 @@
+bellman.agents.decision\_time\_planning.decision\_time\_planning\_agent.DecisionTimePlanningAgent
+=================================================================================================
+
+.. currentmodule:: bellman.agents.decision_time_planning.decision_time_planning_agent
+
+.. autoclass:: DecisionTimePlanningAgent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~DecisionTimePlanningAgent.initialize
+      ~DecisionTimePlanningAgent.loss
+      ~DecisionTimePlanningAgent.preprocess_sequence
+      ~DecisionTimePlanningAgent.train
+      ~DecisionTimePlanningAgent.with_name_scope
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DecisionTimePlanningAgent.action_spec
+      ~DecisionTimePlanningAgent.collect_data_context
+      ~DecisionTimePlanningAgent.collect_data_spec
+      ~DecisionTimePlanningAgent.collect_policy
+      ~DecisionTimePlanningAgent.data_context
+      ~DecisionTimePlanningAgent.debug_summaries
+      ~DecisionTimePlanningAgent.initial_state_distribution_model
+      ~DecisionTimePlanningAgent.name
+      ~DecisionTimePlanningAgent.name_scope
+      ~DecisionTimePlanningAgent.policy
+      ~DecisionTimePlanningAgent.reward_model
+      ~DecisionTimePlanningAgent.submodules
+      ~DecisionTimePlanningAgent.summaries_enabled
+      ~DecisionTimePlanningAgent.summarize_grads_and_vars
+      ~DecisionTimePlanningAgent.termination_model
+      ~DecisionTimePlanningAgent.time_step_spec
+      ~DecisionTimePlanningAgent.train_argspec
+      ~DecisionTimePlanningAgent.train_sequence_length
+      ~DecisionTimePlanningAgent.train_step_counter
+      ~DecisionTimePlanningAgent.trainable_variables
+      ~DecisionTimePlanningAgent.training_data_spec
+      ~DecisionTimePlanningAgent.transition_model
+      ~DecisionTimePlanningAgent.validate_args
+      ~DecisionTimePlanningAgent.variables
+   
+   

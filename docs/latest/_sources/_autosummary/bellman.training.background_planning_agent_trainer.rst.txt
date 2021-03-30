@@ -1,0 +1,32 @@
+bellman.training.background\_planning\_agent\_trainer
+=====================================================
+
+.. automodule:: bellman.training.background_planning_agent_trainer
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      BackgroundPlanningAgentTrainer
+   
+   
+
+   
+   
+   
+
+
+

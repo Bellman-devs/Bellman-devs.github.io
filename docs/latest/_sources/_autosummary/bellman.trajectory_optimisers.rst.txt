@@ -1,0 +1,34 @@
+bellman.trajectory\_optimisers
+==============================
+
+.. automodule:: bellman.trajectory_optimisers
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.trajectory_optimisers.cross_entropy_method
+   bellman.trajectory_optimisers.particles
+   bellman.trajectory_optimisers.random_shooting
+   bellman.trajectory_optimisers.trajectory_optimisers
+   bellman.trajectory_optimisers.trajectory_optimization_types
+

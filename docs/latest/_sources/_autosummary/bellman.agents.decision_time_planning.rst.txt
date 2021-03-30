@@ -1,0 +1,30 @@
+bellman.agents.decision\_time\_planning
+=======================================
+
+.. automodule:: bellman.agents.decision_time_planning
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.agents.decision_time_planning.decision_time_planning_agent
+

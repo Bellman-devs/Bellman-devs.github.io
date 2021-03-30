@@ -1,0 +1,34 @@
+bellman.environments.transition\_model.keras\_model.trajectory\_sampling.InfiniteHorizonTrajectorySampling
+==========================================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.trajectory_sampling
+
+.. autoclass:: InfiniteHorizonTrajectorySampling
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~InfiniteHorizonTrajectorySampling.train_model
+      ~InfiniteHorizonTrajectorySampling.transform_step_inputs
+      ~InfiniteHorizonTrajectorySampling.transform_step_outputs
+      ~InfiniteHorizonTrajectorySampling.update_batch_size
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~InfiniteHorizonTrajectorySampling.ensemble_size
+   
+   

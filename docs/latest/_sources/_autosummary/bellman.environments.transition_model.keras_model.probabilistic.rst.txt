@@ -1,0 +1,41 @@
+bellman.environments.transition\_model.keras\_model.probabilistic
+=================================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model.probabilistic
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      negloglik
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      DiagonalGaussianTransitionNetwork
+      GaussianTransitionNetwork
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,39 @@
+bellman.environments.transition\_model.keras\_model
+===================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.environments.transition_model.keras_model.factory_methods
+   bellman.environments.transition_model.keras_model.keras
+   bellman.environments.transition_model.keras_model.linear
+   bellman.environments.transition_model.keras_model.multilayer
+   bellman.environments.transition_model.keras_model.network
+   bellman.environments.transition_model.keras_model.probabilistic
+   bellman.environments.transition_model.keras_model.trajectory_sampler_types
+   bellman.environments.transition_model.keras_model.trajectory_sampling
+   bellman.environments.transition_model.keras_model.transition_model_types
+   bellman.environments.transition_model.keras_model.utils
+

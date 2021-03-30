@@ -1,0 +1,40 @@
+bellman.environments.transition\_model.keras\_model.network
+===========================================================
+
+.. automodule:: bellman.environments.transition_model.keras_model.network
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      sample_with_replacement
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      KerasTransitionNetwork
+   
+   
+
+   
+   
+   
+
+
+

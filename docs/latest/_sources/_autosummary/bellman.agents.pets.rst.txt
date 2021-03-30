@@ -1,0 +1,30 @@
+bellman.agents.pets
+===================
+
+.. automodule:: bellman.agents.pets
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   bellman.agents.pets.pets_agent
+

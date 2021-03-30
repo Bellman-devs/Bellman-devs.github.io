@@ -1,0 +1,34 @@
+bellman.environments.transition\_model.keras\_model.trajectory\_sampling.SingleFunction
+=======================================================================================
+
+.. currentmodule:: bellman.environments.transition_model.keras_model.trajectory_sampling
+
+.. autoclass:: SingleFunction
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~SingleFunction.train_model
+      ~SingleFunction.transform_step_inputs
+      ~SingleFunction.transform_step_outputs
+      ~SingleFunction.update_batch_size
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SingleFunction.ensemble_size
+   
+   

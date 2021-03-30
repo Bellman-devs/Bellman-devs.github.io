@@ -1,0 +1,24 @@
+bellman.agents.components.ModelFreeAgentComponent
+=================================================
+
+.. currentmodule:: bellman.agents.components
+
+.. autoclass:: ModelFreeAgentComponent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ModelFreeAgentComponent.MODEL_FREE_AGENT
+   
+   

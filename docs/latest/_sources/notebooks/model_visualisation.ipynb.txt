@@ -1,0 +1,447 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "liked-discharge",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "# Learning from samples"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "express-narrative",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import tensorflow as tf\n",
+    "from tf_agents.agents.dqn import dqn_agent\n",
+    "from tf_agents.drivers import dynamic_episode_driver, dynamic_step_driver\n",
+    "from tf_agents.environments import suite_gym\n",
+    "from tf_agents.environments.tf_py_environment import TFPyEnvironment\n",
+    "from tf_agents.networks import q_network\n",
+    "from tf_agents.replay_buffers import tf_uniform_replay_buffer\n",
+    "from tf_agents.utils import common\n",
+    "\n",
+    "from bellman.environments.environment_model import EnvironmentModel\n",
+    "from bellman.environments.tf_wrappers import TFTimeLimit\n",
+    "from bellman.environments.transition_model.keras_model.keras import (\n",
+    "    KerasTrainingSpec,\n",
+    "    KerasTransitionModel,\n",
+    ")\n",
+    "from bellman.environments.transition_model.keras_model.linear import LinearTransitionNetwork\n",
+    "from bellman.environments.transition_model.keras_model.trajectory_sampling import (\n",
+    "    InfiniteHorizonTrajectorySampling,\n",
+    ")\n",
+    "from examples.utils.classic_control import (\n",
+    "    MountainCarInitialState,\n",
+    "    MountainCarReward,\n",
+    "    MountainCarTermination,\n",
+    ")\n",
+    "from examples.utils.mountain_car import (\n",
+    "    plot_mountain_car_policy_decisions,\n",
+    "    plot_mountain_car_transitions,\n",
+    ")\n",
+    "from examples.utils.policies import sample_uniformly_distributed_observations_and_get_actions\n",
+    "from examples.utils.trajectories import sample_uniformly_distributed_transitions\n",
+    "from tests.tools.bellman.environments.reward_model import ConstantReward"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "continent-suspect",
+   "metadata": {
+    "lines_to_next_cell": 2
+   },
+   "source": [
+    "\"\"\"\n",
+    "This notebook demonstrates how to assemble a batch model based reinforcement learning system. In\n",
+    "this example we generate trajectories from the Mountain Car gym environment using a random policy,\n",
+    "use that data to train a linear model of the transition function, and use sampled transitions from\n",
+    "the model to train a DQN agent.\n",
+    "\"\"\"\n",
+    "\n",
+    "\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "frequent-potato",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "This example is based on Mountain Car because it is straightforward to visualise the state space\n",
+    "and the linearised dynamics contain enough information to learn a controller using reinforcement\n",
+    "learning."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "specialized-defensive",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "global_step = tf.compat.v1.train.get_or_create_global_step()\n",
+    "tf_env = TFPyEnvironment(suite_gym.load(\"MountainCar-v0\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "analyzed-harrison",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "## Dynamics model\n",
+    "\n",
+    "We define the linear model that is going to be used to model the transition function of this\n",
+    "environment. We plot the predicted dynamics of the untrained model. The action space of the\n",
+    "mountain car environment consists of three discrete elements. These are represented in all\n",
+    "subsequent plots with three colours:\n",
+    "- left impulse: blue\n",
+    "- no impule: red\n",
+    "- right impulse: green\n",
+    "\n",
+    "In these state-space plots, the x-axis is the agents position and the y-axis is the velocity."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "abstract-limitation",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "batch_size = 64\n",
+    "\n",
+    "training_spec = KerasTrainingSpec(\n",
+    "    epochs=5000,\n",
+    "    training_batch_size=256,\n",
+    "    callbacks=[tf.keras.callbacks.EarlyStopping(monitor=\"loss\", patience=3)],\n",
+    "    verbose=0,\n",
+    ")\n",
+    "linear_transition_network = LinearTransitionNetwork(tf_env.observation_spec())\n",
+    "trajectory_sampling_strategy = InfiniteHorizonTrajectorySampling(batch_size, 1)\n",
+    "transition_model = KerasTransitionModel(\n",
+    "    [linear_transition_network],\n",
+    "    tf_env.observation_spec(),\n",
+    "    tf_env.action_spec(),\n",
+    ")\n",
+    "reward_model = ConstantReward(tf_env.observation_spec(), tf_env.action_spec())\n",
+    "sample_transitions = sample_uniformly_distributed_transitions(\n",
+    "    transition_model, 1000, reward_model\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "widespread-remains",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plot_mountain_car_transitions(\n",
+    "    sample_transitions.observation.numpy(),\n",
+    "    sample_transitions.action.numpy(),\n",
+    "    sample_transitions.next_observation.numpy(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "grand-plaza",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "## TF-Agents Agent\n",
+    "\n",
+    "In this notebook we train a TF-Agents DQN agent on samples from the dynamics model. The TF-Agents\n",
+    "agents define two policies: a collect policy and a training policy. For this DQN agent, the\n",
+    "training policy is a greedy policy parametrised by a Q value neural network, and the collect\n",
+    "policy is the associated epsilon greedy policy.\n",
+    "\n",
+    "We use the collect policy from the untrained DQN agent to generate trajectories from the real\n",
+    "Mountain Car environment in order to train the dynamics model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fundamental-title",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train_sequence_length = 1\n",
+    "fc_layer_params = (100,)\n",
+    "collect_model_training_episodes = 100\n",
+    "model_training_buffer_capacity = 25000\n",
+    "collect_steps_per_iteration = 10000\n",
+    "epsilon_greedy = 0.1\n",
+    "replay_buffer_capacity = 1000000\n",
+    "target_update_tau = 0.05\n",
+    "target_update_period = 5\n",
+    "learning_rate = 1e-3\n",
+    "n_step_update = 1\n",
+    "gamma = 0.99\n",
+    "gradient_clipping = None\n",
+    "reward_scale_factor = 1.0\n",
+    "debug_summaries = False\n",
+    "summarize_grads_and_vars = False\n",
+    "\n",
+    "q_net = q_network.QNetwork(\n",
+    "    tf_env.observation_spec(), tf_env.action_spec(), fc_layer_params=fc_layer_params\n",
+    ")\n",
+    "\n",
+    "\n",
+    "tf_agent = dqn_agent.DqnAgent(\n",
+    "    tf_env.time_step_spec(),\n",
+    "    tf_env.action_spec(),\n",
+    "    q_network=q_net,\n",
+    "    epsilon_greedy=epsilon_greedy,\n",
+    "    n_step_update=n_step_update,\n",
+    "    target_update_tau=target_update_tau,\n",
+    "    target_update_period=target_update_period,\n",
+    "    optimizer=tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate),\n",
+    "    td_errors_loss_fn=common.element_wise_squared_loss,\n",
+    "    gamma=gamma,\n",
+    "    reward_scale_factor=reward_scale_factor,\n",
+    "    gradient_clipping=gradient_clipping,\n",
+    "    debug_summaries=debug_summaries,\n",
+    "    summarize_grads_and_vars=summarize_grads_and_vars,\n",
+    "    train_step_counter=global_step,\n",
+    ")\n",
+    "tf_agent.initialize()\n",
+    "\n",
+    "\n",
+    "eval_policy = tf_agent.policy\n",
+    "collect_policy = tf_agent.collect_policy\n",
+    "\n",
+    "model_training_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(\n",
+    "    collect_policy.trajectory_spec,\n",
+    "    batch_size=tf_env.batch_size,\n",
+    "    max_length=model_training_buffer_capacity,\n",
+    ")\n",
+    "\n",
+    "model_collect_driver = dynamic_episode_driver.DynamicEpisodeDriver(\n",
+    "    tf_env,\n",
+    "    collect_policy,\n",
+    "    observers=[model_training_buffer.add_batch],\n",
+    "    num_episodes=collect_model_training_episodes,\n",
+    ")\n",
+    "\n",
+    "model_collect_driver.run()\n",
+    "\n",
+    "\n",
+    "def train_model_step():\n",
+    "    trajectories = model_training_buffer.gather_all()\n",
+    "    return transition_model.train(trajectories, training_spec)\n",
+    "\n",
+    "\n",
+    "train_model_step()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "adequate-adult",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "This plot was produced in the same manner as the previous one, but the model has now been trained on\n",
+    "data from the real environment. The dynamics of the environment have been captured by the model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "extra-luther",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample_transitions = sample_uniformly_distributed_transitions(\n",
+    "    transition_model, 1000, reward_model\n",
+    ")\n",
+    "\n",
+    "plot_mountain_car_transitions(\n",
+    "    sample_transitions.observation.numpy(),\n",
+    "    sample_transitions.action.numpy(),\n",
+    "    sample_transitions.next_observation.numpy(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "turkish-grenada",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "## Training on samples\n",
+    "\n",
+    "We define an environment which uses the trained transition model for the dynamics, along with a\n",
+    "reward function, episode termination condition, initial state distributions and bound on episode\n",
+    "length."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "impossible-damage",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "reward = MountainCarReward(tf_env.observation_spec(), tf_env.action_spec())\n",
+    "terminates = MountainCarTermination(tf_env.observation_spec())\n",
+    "initial_state_distribution = MountainCarInitialState(tf_env.observation_spec())\n",
+    "environment_model = TFTimeLimit(\n",
+    "    EnvironmentModel(transition_model, reward, terminates, initial_state_distribution),\n",
+    "    duration=200,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "sitting-narrative",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "The agent is trained on data gathered from the environment model. Using the environment interface\n",
+    "means the TF-Agents drivers can be used to generate rollouts."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "wooden-option",
+   "metadata": {
+    "lines_to_next_cell": 2
+   },
+   "outputs": [],
+   "source": [
+    "replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(\n",
+    "    data_spec=tf_agent.collect_data_spec,\n",
+    "    batch_size=tf_env.batch_size,\n",
+    "    max_length=replay_buffer_capacity,\n",
+    ")\n",
+    "\n",
+    "collect_driver = dynamic_step_driver.DynamicStepDriver(\n",
+    "    environment_model,\n",
+    "    collect_policy,\n",
+    "    observers=[replay_buffer.add_batch],\n",
+    "    num_steps=collect_steps_per_iteration,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fresh-message",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "Before training the policy we plot the decisions made at random locations in the state space."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "superb-return",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "time_step = None\n",
+    "policy_state = collect_policy.get_initial_state(tf_env.batch_size)\n",
+    "collect_driver.run(time_step=time_step, policy_state=policy_state)\n",
+    "\n",
+    "sample_trajectories = replay_buffer.gather_all()\n",
+    "\n",
+    "samples = sample_uniformly_distributed_observations_and_get_actions(tf_agent.policy, 1000)\n",
+    "plot_mountain_car_policy_decisions(samples[\"observations\"].numpy(), samples[\"actions\"].numpy())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "gothic-mortality",
+   "metadata": {
+    "cell_marker": "\"\"\"",
+    "lines_to_next_cell": 1
+   },
+   "source": [
+    "After a single training iteration, we again plot the decisions made by the policy."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "processed-operations",
+   "metadata": {
+    "lines_to_next_cell": 0
+   },
+   "outputs": [],
+   "source": [
+    "def train_step():\n",
+    "    dataset = replay_buffer.as_dataset(\n",
+    "        num_parallel_calls=3, sample_batch_size=batch_size, num_steps=train_sequence_length + 1\n",
+    "    ).prefetch(3)\n",
+    "    iterator = iter(dataset)\n",
+    "    experience, _ = next(iterator)\n",
+    "    return tf_agent.train(experience)\n",
+    "\n",
+    "\n",
+    "time_step, policy_state = collect_driver.run(time_step=time_step, policy_state=policy_state)\n",
+    "train_loss = train_step()\n",
+    "\n",
+    "samples = sample_uniformly_distributed_observations_and_get_actions(tf_agent.policy, 1000)\n",
+    "plot_mountain_car_policy_decisions(samples[\"observations\"].numpy(), samples[\"actions\"].numpy())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "technical-criterion",
+   "metadata": {
+    "cell_marker": "\"\"\""
+   },
+   "source": [
+    "Having trained the policy for a small number of iterations it is clear that the policy is\n",
+    "improving. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "english-culture",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for _ in range(5):\n",
+    "    time_step, policy_state = collect_driver.run(\n",
+    "        time_step=time_step, policy_state=policy_state\n",
+    "    )\n",
+    "    train_loss = train_step()\n",
+    "\n",
+    "samples = sample_uniformly_distributed_observations_and_get_actions(tf_agent.policy, 1000)\n",
+    "plot_mountain_car_policy_decisions(samples[\"observations\"].numpy(), samples[\"actions\"].numpy())"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "cell_markers": "\"\"\""
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
