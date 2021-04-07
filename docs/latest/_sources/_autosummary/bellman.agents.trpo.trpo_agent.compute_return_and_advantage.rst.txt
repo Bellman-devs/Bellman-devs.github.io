@@ -1,6 +1,0 @@
-bellman.agents.trpo.trpo\_agent.compute\_return\_and\_advantage
-===============================================================
-
-.. currentmodule:: bellman.agents.trpo.trpo_agent
-
-.. autofunction:: compute_return_and_advantage

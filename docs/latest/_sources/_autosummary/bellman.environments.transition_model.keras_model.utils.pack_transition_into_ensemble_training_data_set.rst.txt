@@ -1,6 +1,0 @@
-bellman.environments.transition\_model.keras\_model.utils.pack\_transition\_into\_ensemble\_training\_data\_set
-===============================================================================================================
-
-.. currentmodule:: bellman.environments.transition_model.keras_model.utils
-
-.. autofunction:: pack_transition_into_ensemble_training_data_set

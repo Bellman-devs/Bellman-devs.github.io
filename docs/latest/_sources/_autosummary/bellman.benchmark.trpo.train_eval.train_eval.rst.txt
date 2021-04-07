@@ -1,6 +1,0 @@
-bellman.benchmark.trpo.train\_eval.train\_eval
-==============================================
-
-.. currentmodule:: bellman.benchmark.trpo.train_eval
-
-.. autofunction:: train_eval

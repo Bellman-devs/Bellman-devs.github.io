@@ -1,6 +1,0 @@
-bellman.distributions.utils.create\_uniform\_distribution\_from\_spec
-=====================================================================
-
-.. currentmodule:: bellman.distributions.utils
-
-.. autofunction:: create_uniform_distribution_from_spec

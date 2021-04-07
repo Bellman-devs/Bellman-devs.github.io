@@ -1,6 +1,0 @@
-bellman.trajectory\_optimisers.random\_shooting.random\_shooting\_trajectory\_optimisation
-==========================================================================================
-
-.. currentmodule:: bellman.trajectory_optimisers.random_shooting
-
-.. autofunction:: random_shooting_trajectory_optimisation

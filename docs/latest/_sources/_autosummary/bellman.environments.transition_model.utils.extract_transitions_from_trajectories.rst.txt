@@ -1,6 +1,0 @@
-bellman.environments.transition\_model.utils.extract\_transitions\_from\_trajectories
-=====================================================================================
-
-.. currentmodule:: bellman.environments.transition_model.utils
-
-.. autofunction:: extract_transitions_from_trajectories

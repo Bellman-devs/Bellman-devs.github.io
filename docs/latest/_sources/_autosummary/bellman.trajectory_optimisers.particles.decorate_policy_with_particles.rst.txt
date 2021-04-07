@@ -1,6 +1,0 @@
-bellman.trajectory\_optimisers.particles.decorate\_policy\_with\_particles
-==========================================================================
-
-.. currentmodule:: bellman.trajectory_optimisers.particles
-
-.. autofunction:: decorate_policy_with_particles

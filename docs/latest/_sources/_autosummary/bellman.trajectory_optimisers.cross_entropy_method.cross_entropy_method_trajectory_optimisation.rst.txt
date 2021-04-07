@@ -1,6 +1,0 @@
-bellman.trajectory\_optimisers.cross\_entropy\_method.cross\_entropy\_method\_trajectory\_optimisation
-======================================================================================================
-
-.. currentmodule:: bellman.trajectory_optimisers.cross_entropy_method
-
-.. autofunction:: cross_entropy_method_trajectory_optimisation

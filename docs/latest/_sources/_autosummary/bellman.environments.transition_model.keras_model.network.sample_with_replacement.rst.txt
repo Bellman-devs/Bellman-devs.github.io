@@ -1,6 +1,0 @@
-bellman.environments.transition\_model.keras\_model.network.sample\_with\_replacement
-=====================================================================================
-
-.. currentmodule:: bellman.environments.transition_model.keras_model.network
-
-.. autofunction:: sample_with_replacement

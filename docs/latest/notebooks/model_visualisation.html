@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Learning from samples &mdash; Bellman 1.0 documentation</title>
+  <title>Learning from samples &mdash; Bellman 0.1.0 documentation</title>
   
 
   
@@ -165,21 +165,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -280,7 +294,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -346,6 +360,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -417,7 +432,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Learning-from-samples">
 <h1>Learning from samples<a class="headerlink" href="#Learning-from-samples" title="Permalink to this headline">¶</a></h1>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -456,10 +471,27 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-e229c71fe371&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> tensorflow <span class="ansi-green-fg">as</span> tf
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">from</span> tf_agents<span class="ansi-blue-fg">.</span>agents<span class="ansi-blue-fg">.</span>dqn <span class="ansi-green-fg">import</span> dqn_agent
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">from</span> tf_agents<span class="ansi-blue-fg">.</span>drivers <span class="ansi-green-fg">import</span> dynamic_episode_driver<span class="ansi-blue-fg">,</span> dynamic_step_driver
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">from</span> tf_agents<span class="ansi-blue-fg">.</span>environments <span class="ansi-green-fg">import</span> suite_gym
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">from</span> tf_agents<span class="ansi-blue-fg">.</span>environments<span class="ansi-blue-fg">.</span>tf_py_environment <span class="ansi-green-fg">import</span> TFPyEnvironment
+
+<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named &#39;tensorflow&#39;
+</pre></div></div>
+</div>
 <p>“”” This notebook demonstrates how to assemble a batch model based reinforcement learning system. In this example we generate trajectories from the Mountain Car gym environment using a random policy, use that data to train a linear model of the transition function, and use sampled transitions from the model to train a DQN agent. “””</p>
 <p>%matplotlib inline</p>
 <p>This example is based on Mountain Car because it is straightforward to visualise the state space and the linearised dynamics contain enough information to learn a controller using reinforcement learning.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -469,11 +501,25 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-6f4d0f4ab99c&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>global_step <span class="ansi-blue-fg">=</span> tf<span class="ansi-blue-fg">.</span>compat<span class="ansi-blue-fg">.</span>v1<span class="ansi-blue-fg">.</span>train<span class="ansi-blue-fg">.</span>get_or_create_global_step<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> tf_env <span class="ansi-blue-fg">=</span> TFPyEnvironment<span class="ansi-blue-fg">(</span>suite_gym<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;MountainCar-v0&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;tf&#39; is not defined
+</pre></div></div>
+</div>
 <div class="section" id="Dynamics-model">
 <h2>Dynamics model<a class="headerlink" href="#Dynamics-model" title="Permalink to this headline">¶</a></h2>
 <p>We define the linear model that is going to be used to model the transition function of this environment. We plot the predicted dynamics of the untrained model. The action space of the mountain car environment consists of three discrete elements. These are represented in all subsequent plots with three colours: - left impulse: blue - no impule: red - right impulse: green</p>
 <p>In these state-space plots, the x-axis is the agents position and the y-axis is the velocity.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -500,6 +546,23 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-e9c35f5ee664&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> batch_size <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">64</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg"> training_spec = KerasTrainingSpec(
+</span><span class="ansi-green-intense-fg ansi-bold">      4</span>     epochs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">5000</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     training_batch_size<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">256</span><span class="ansi-blue-fg">,</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;KerasTrainingSpec&#39; is not defined
+</pre></div></div>
+</div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -517,8 +580,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_model_visualisation_7_0.png" src="../_images/notebooks_model_visualisation_7_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-b66d7bc1297b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> plot_mountain_car_transitions(
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>     sample_transitions<span class="ansi-blue-fg">.</span>observation<span class="ansi-blue-fg">.</span>numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>     sample_transitions<span class="ansi-blue-fg">.</span>action<span class="ansi-blue-fg">.</span>numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     sample_transitions<span class="ansi-blue-fg">.</span>next_observation<span class="ansi-blue-fg">.</span>numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> )
+
+<span class="ansi-red-fg">NameError</span>: name &#39;plot_mountain_car_transitions&#39; is not defined
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="TF-Agents-Agent">
@@ -600,23 +673,21 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-WARNING:tensorflow:From &lt;ipython-input-5-d9c7c421d8da&gt;:63: ReplayBuffer.gather_all (from tf_agents.replay_buffers.replay_buffer) is deprecated and will be removed in a future version.
-Instructions for updating:
-Use `as_dataset(..., single_deterministic_pass=True)` instead.
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;tensorflow.python.keras.callbacks.History at 0x7fe30a93ec90&gt;
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-d9c7c421d8da&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span> summarize_grads_and_vars <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span>
+<span class="ansi-green-intense-fg ansi-bold">     17</span>
+<span class="ansi-green-fg">---&gt; 18</span><span class="ansi-red-fg"> q_net = q_network.QNetwork(
+</span><span class="ansi-green-intense-fg ansi-bold">     19</span>     tf_env<span class="ansi-blue-fg">.</span>observation_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> tf_env<span class="ansi-blue-fg">.</span>action_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> fc_layer_params<span class="ansi-blue-fg">=</span>fc_layer_params
+<span class="ansi-green-intense-fg ansi-bold">     20</span> )
+
+<span class="ansi-red-fg">NameError</span>: name &#39;q_network&#39; is not defined
 </pre></div></div>
 </div>
 <p>This plot was produced in the same manner as the previous one, but the model has now been trained on data from the real environment. The dynamics of the environment have been captured by the model.</p>
@@ -641,14 +712,24 @@ Use `as_dataset(..., single_deterministic_pass=True)` instead.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_model_visualisation_11_0.png" src="../_images/notebooks_model_visualisation_11_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-423a7fdd97a0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> sample_transitions = sample_uniformly_distributed_transitions(
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>     transition_model<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1000</span><span class="ansi-blue-fg">,</span> reward_model
+<span class="ansi-green-intense-fg ansi-bold">      3</span> )
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> plot_mountain_car_transitions(
+
+<span class="ansi-red-fg">NameError</span>: name &#39;sample_uniformly_distributed_transitions&#39; is not defined
+</pre></div></div>
 </div>
 </div>
 <div class="section" id="Training-on-samples">
 <h2>Training on samples<a class="headerlink" href="#Training-on-samples" title="Permalink to this headline">¶</a></h2>
 <p>We define an environment which uses the trained transition model for the dynamics, along with a reward function, episode termination condition, initial state distributions and bound on episode length.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -663,8 +744,25 @@ Use `as_dataset(..., single_deterministic_pass=True)` instead.
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-f8e6995a4b48&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>reward <span class="ansi-blue-fg">=</span> MountainCarReward<span class="ansi-blue-fg">(</span>tf_env<span class="ansi-blue-fg">.</span>observation_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> tf_env<span class="ansi-blue-fg">.</span>action_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> terminates <span class="ansi-blue-fg">=</span> MountainCarTermination<span class="ansi-blue-fg">(</span>tf_env<span class="ansi-blue-fg">.</span>observation_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> initial_state_distribution <span class="ansi-blue-fg">=</span> MountainCarInitialState<span class="ansi-blue-fg">(</span>tf_env<span class="ansi-blue-fg">.</span>observation_spec<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> environment_model = TFTimeLimit(
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     EnvironmentModel<span class="ansi-blue-fg">(</span>transition_model<span class="ansi-blue-fg">,</span> reward<span class="ansi-blue-fg">,</span> terminates<span class="ansi-blue-fg">,</span> initial_state_distribution<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;MountainCarReward&#39; is not defined
+</pre></div></div>
+</div>
 <p>The agent is trained on data gathered from the environment model. Using the environment interface means the TF-Agents drivers can be used to generate rollouts.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -684,6 +782,23 @@ Use `as_dataset(..., single_deterministic_pass=True)` instead.
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-f0acc5f6a430&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
+</span><span class="ansi-green-intense-fg ansi-bold">      2</span>     data_spec<span class="ansi-blue-fg">=</span>tf_agent<span class="ansi-blue-fg">.</span>collect_data_spec<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>     batch_size<span class="ansi-blue-fg">=</span>tf_env<span class="ansi-blue-fg">.</span>batch_size<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     max_length<span class="ansi-blue-fg">=</span>replay_buffer_capacity<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> )
+
+<span class="ansi-red-fg">NameError</span>: name &#39;tf_uniform_replay_buffer&#39; is not defined
+</pre></div></div>
+</div>
 <p>Before training the policy we plot the decisions made at random locations in the state space.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -701,26 +816,22 @@ Use `as_dataset(..., single_deterministic_pass=True)` instead.
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-WARNING:tensorflow:From /home/runner/work/Bellman-devs.github.io/Bellman-devs.github.io/bellman/.venv/lib/python3.7/site-packages/tf_agents/drivers/dynamic_step_driver.py:203: calling while_loop_v2 (from tensorflow.python.ops.control_flow_ops) with back_prop=False is deprecated and will be removed in a future version.
-Instructions for updating:
-back_prop=False is deprecated. Consider using tf.stop_gradient instead.
-Instead of:
-results = tf.while_loop(c, b, vars, back_prop=False)
-Use:
-results = tf.nest.map_structure(tf.stop_gradient, tf.while_loop(c, b, vars))
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_model_visualisation_17_1.png" src="../_images/notebooks_model_visualisation_17_1.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-3d76e308ab48&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> time_step <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>policy_state <span class="ansi-blue-fg">=</span> collect_policy<span class="ansi-blue-fg">.</span>get_initial_state<span class="ansi-blue-fg">(</span>tf_env<span class="ansi-blue-fg">.</span>batch_size<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> collect_driver<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>time_step<span class="ansi-blue-fg">=</span>time_step<span class="ansi-blue-fg">,</span> policy_state<span class="ansi-blue-fg">=</span>policy_state<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> sample_trajectories <span class="ansi-blue-fg">=</span> replay_buffer<span class="ansi-blue-fg">.</span>gather_all<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;collect_policy&#39; is not defined
+</pre></div></div>
 </div>
 <p>After a single training iteration, we again plot the decisions made by the policy.</p>
 <div class="nbinput docutils container">
@@ -745,29 +856,22 @@ results = tf.nest.map_structure(tf.stop_gradient, tf.while_loop(c, b, vars))
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-WARNING:tensorflow:From /home/runner/work/Bellman-devs.github.io/Bellman-devs.github.io/bellman/.venv/lib/python3.7/site-packages/tensorflow/python/autograph/operators/control_flow.py:1218: ReplayBuffer.get_next (from tf_agents.replay_buffers.replay_buffer) is deprecated and will be removed in a future version.
-Instructions for updating:
-Use `as_dataset(..., single_deterministic_pass=False) instead.
-WARNING:tensorflow:From /home/runner/work/Bellman-devs.github.io/Bellman-devs.github.io/bellman/.venv/lib/python3.7/site-packages/tensorflow/python/util/dispatch.py:201: calling foldr_v2 (from tensorflow.python.ops.functional_ops) with back_prop=False is deprecated and will be removed in a future version.
-Instructions for updating:
-back_prop=False is deprecated. Consider using tf.stop_gradient instead.
-Instead of:
-results = tf.foldr(fn, elems, back_prop=False)
-Use:
-results = tf.nest.map_structure(tf.stop_gradient, tf.foldr(fn, elems))
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_model_visualisation_19_1.png" src="../_images/notebooks_model_visualisation_19_1.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-e995a7410889&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg"> </span>time_step<span class="ansi-blue-fg">,</span> policy_state <span class="ansi-blue-fg">=</span> collect_driver<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span>time_step<span class="ansi-blue-fg">=</span>time_step<span class="ansi-blue-fg">,</span> policy_state<span class="ansi-blue-fg">=</span>policy_state<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> train_loss <span class="ansi-blue-fg">=</span> train_step<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;collect_driver&#39; is not defined
+</pre></div></div>
 </div>
 <p>Having trained the policy for a small number of iterations it is clear that the policy is improving.</p>
 <div class="nbinput docutils container">
@@ -790,8 +894,18 @@ results = tf.nest.map_structure(tf.stop_gradient, tf.foldr(fn, elems))
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_model_visualisation_21_0.png" src="../_images/notebooks_model_visualisation_21_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-eb5a6cbc97fe&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">for</span> _ <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">5</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     time_step, policy_state = collect_driver.run(
+</span><span class="ansi-green-intense-fg ansi-bold">      3</span>         time_step<span class="ansi-blue-fg">=</span>time_step<span class="ansi-blue-fg">,</span> policy_state<span class="ansi-blue-fg">=</span>policy_state
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     )
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     train_loss <span class="ansi-blue-fg">=</span> train_step<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;collect_driver&#39; is not defined
+</pre></div></div>
 </div>
 </div>
 </div>

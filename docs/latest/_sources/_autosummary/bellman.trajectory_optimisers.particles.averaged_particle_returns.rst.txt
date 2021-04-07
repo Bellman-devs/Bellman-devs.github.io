@@ -1,6 +1,0 @@
-bellman.trajectory\_optimisers.particles.averaged\_particle\_returns
-====================================================================
-
-.. currentmodule:: bellman.trajectory_optimisers.particles
-
-.. autofunction:: averaged_particle_returns

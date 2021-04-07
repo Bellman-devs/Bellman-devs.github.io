@@ -1,6 +1,0 @@
-bellman.agents.trpo.utils.unflatten\_tensor
-===========================================
-
-.. currentmodule:: bellman.agents.trpo.utils
-
-.. autofunction:: unflatten_tensor
