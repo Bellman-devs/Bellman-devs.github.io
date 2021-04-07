@@ -27,6 +27,7 @@ jobs:
       if: github.event.action == 'PushOnDevelopBranch'
       run: |
         cd bellman
+        pip install -r docs/docs_requirements.txt
         poetry run task docsgen
         rm -rf ../docs/latest && mkdir ../docs/latest
         mv docs/_build/html/* ../docs/latest
