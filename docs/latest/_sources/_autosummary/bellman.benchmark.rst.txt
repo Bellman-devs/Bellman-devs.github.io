@@ -26,6 +26,7 @@ bellman.benchmark
    :template: custom-module-template.rst
    :recursive:
 
+   bellman.benchmark.mbpo
    bellman.benchmark.mepo
    bellman.benchmark.pets
    bellman.benchmark.trpo
